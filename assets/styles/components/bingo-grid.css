@@ -1,0 +1,11 @@
+.bingo-grid {
+    @apply grid grid-cols-4 grid-rows-4 gap-2 bg-black;
+}
+
+.bingo-cell {
+    @apply bg-white border border-gray-300 rounded text-center font-bold;
+}
+
+.bingo-cell.marked {
+    @apply bg-yellow-300;
+}

@@ -1,20 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello BingoController!{% endblock %}
+{% block title %}Bingo {{ bingo.year }}{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <main>
+        <h1>{{ bingo.title }} - {{ bingo.year }}</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/Users/antonin.p/Workspace/playground/bingo/src/Controller/BingoController.php</code></li>
-        <li>Your template at <code>/Users/antonin.p/Workspace/playground/bingo/templates/bingo/index.html.twig</code></li>
-    </ul>
-</div>
+        <div class="bingo-grid">
+            {% for item in bingo.bingoItems %}
+
+                <div class="bingo-cell" data-controller="bingo-cell" data-bingo-cell-target="cell"
+                     data-action="click->bingo-cell#mark">{{ item.label }}</div>
+            {% endfor %}
+        </div>
+    </main>
 {% endblock %}
