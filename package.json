@@ -1,0 +1,26 @@
+{
+  "name": "bingo",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/CallMeTrinity/bingo#readme",
+  "bugs": {
+    "url": "https://github.com/CallMeTrinity/bingo/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CallMeTrinity/bingo.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+    "devDependencies": {
+        "tailwindcss": "^4.3.0"
+    }
+}
