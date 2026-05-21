@@ -1,33 +1,11 @@
 # Roadmap — Bingo Annuel (Symfony UX + Turbo)
 
 ## Stack
-- Symfony 7 + Doctrine ORM
-- Symfony UX Turbo (Turbo Drive, Turbo Frames, Turbo Streams)
-- Symfony UX Stimulus
-- Twig + CSS custom (CSS Grid)
-- SQLite (dev) → PostgreSQL (prod)
-
 ---
 
 ## Phase 1 — Foundation
 
 **Objectif : afficher une grille statique avec des données en base.**
-
-### 1.1 Initialisation du projet
-
-```bash
-symfony new bingo --version="7.*"
-cd bingo
-composer require doctrine/orm doctrine/doctrine-bundle symfony/twig-bundle symfony/form symfony/validator
-composer require symfony/ux-turbo stimulus-bundle
-npm install && npm run dev
-```
-
-Fichiers générés automatiquement :
-- `config/packages/doctrine.yaml`
-- `config/packages/twig.yaml`
-- `assets/app.js`
-- `assets/controllers.json`
 
 ### 1.2 Entités
 
