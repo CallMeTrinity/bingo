@@ -4,41 +4,38 @@
 
 {% set pct = total > 0 ? (completed / total * 100) : 0 %}
 {% set dash = total > 0 ? (completed / total * 97.4) : 0 %}
-{% set tones = ['lavender', 'peach', 'mint', 'sky', 'butter'] %}
 {% set eyebrow = 'text-[11px] font-semibold tracking-widest uppercase text-ink-soft' %}
 
 {% block body %}
     <div data-controller="bingo-board"
          data-action="bingo-cell:updated->bingo-board#sync">
 
-        <header class="sticky top-0 z-50 flex items-center gap-4 px-7 py-5 border-b border-line-soft bg-cream/70 backdrop-blur-md">
-            <div class="w-9.5 h-9.5 rounded-xl bg-lavender flex items-center justify-center font-serif text-[22px] text-ink shadow-[0_2px_6px_-2px_rgba(42,38,64,.18),0_1px_0_rgba(255,255,255,.5)_inset]">
-                B
-            </div>
-
-            <div class="flex-1">
+        {% embed 'components/header.html.twig' %}
+            {% block header_main %}
                 <div class="{{ eyebrow }}">{{ bingo.year }}</div>
                 <h1 class="font-serif text-[26px] leading-tight mt-0.5">{{ bingo.title }}</h1>
-            </div>
+            {% endblock %}
 
-            <div class="flex items-center gap-3.5">
-                <div class="text-right">
-                    <div class="{{ eyebrow }}">Avancement</div>
-                    <div class="font-serif text-[22px]" data-bingo-board-target="progressFraction">
-                        {{ completed }}<span class="text-ink-faint">/{{ total }}</span>
+            {% block header_right %}
+                <div class="flex items-center gap-3.5">
+                    <div class="text-right">
+                        <div class="{{ eyebrow }}">Avancement</div>
+                        <div class="font-serif text-[22px]" data-bingo-board-target="progressFraction">
+                            {{ completed }}<span class="text-ink-faint">/{{ total }}</span>
+                        </div>
+                    </div>
+                    <div class="relative w-14 h-14">
+                        <svg viewBox="0 0 36 36" width="56" height="56" class="-rotate-90">
+                            <circle cx="18" cy="18" r="15.5" fill="none" stroke="var(--color-line)" stroke-width="3" />
+                            <circle cx="18" cy="18" r="15.5" fill="none" stroke="var(--color-lavender)" stroke-width="3" stroke-linecap="round"
+                                    data-bingo-board-target="progressRing"
+                                    stroke-dasharray="{{ dash }} 97.4" />
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center text-[13px] font-semibold" data-bingo-board-target="progressLabel">{{ pct|round }}%</div>
                     </div>
                 </div>
-                <div class="relative w-14 h-14">
-                    <svg viewBox="0 0 36 36" width="56" height="56" class="-rotate-90">
-                        <circle cx="18" cy="18" r="15.5" fill="none" stroke="var(--color-line)" stroke-width="3" />
-                        <circle cx="18" cy="18" r="15.5" fill="none" stroke="var(--color-lavender)" stroke-width="3" stroke-linecap="round"
-                                data-bingo-board-target="progressRing"
-                                stroke-dasharray="{{ dash }} 97.4" />
-                    </svg>
-                    <div class="absolute inset-0 flex items-center justify-center text-[13px] font-semibold" data-bingo-board-target="progressLabel">{{ pct|round }}%</div>
-                </div>
-            </div>
-        </header>
+            {% endblock %}
+        {% endembed %}
 
         <main class="max-w-270 mx-auto px-7 pt-8 pb-20">
             <section class="flex flex-wrap gap-3 mb-6">
