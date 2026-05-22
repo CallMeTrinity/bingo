@@ -1,8 +1,2 @@
 @import "tailwindcss";
-
 @import "./components/bingo.css";
-
-
-@theme {
-    --anim-delay: 0ms;
-}

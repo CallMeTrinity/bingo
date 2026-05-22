@@ -41,4 +41,16 @@ private const COLUMNS = [
     {
         return count($this->getCompletedLines($bingo)) > 0 || count($this->getCompletedColumns($bingo)) > 0;
     }
+
+    /**
+     * @return int[] positions belonging to at least one completed line or column
+     */
+    public function getLinePositions(Bingo $bingo): array
+    {
+        $positions = [];
+        foreach (array_merge($this->getCompletedLines($bingo), $this->getCompletedColumns($bingo)) as $group) {
+            $positions = array_merge($positions, $group);
+        }
+        return array_values(array_unique($positions));
+    }
 }

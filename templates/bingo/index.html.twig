@@ -2,24 +2,105 @@
 
 {% block title %}Bingo {{ bingo.year }}{% endblock %}
 
+{% set pct = total > 0 ? (completed / total * 100) : 0 %}
+{% set dash = total > 0 ? (completed / total * 97.4) : 0 %}
+
 {% block body %}
-
-    <main>
-        <h1>{{ bingo.title }} - {{ bingo.year }}</h1>
-
-        <div class="bingo-grid">
-            {% for item in bingo.bingoItems %}
-
-                <div data-controller="bingo-cell"
-                     data-action="click->bingo-cell#toggle"
-                     data-bingo-cell-target="cell"
-                     data-bingo-cell-url-value="{{ path('bingo_check', {id: item.id}) }}"
-                     data-bingo-cell-active-value="{{ item.completedAt ? 'true' : 'false' }}"
-                     data-position="{{ item.position }}"
-                     class="{{ item.completedAt ? 'active' : '' }}">
-                        {{ item.label }}
+    <div data-controller="bingo-board"
+         data-action="bingo-cell:updated->bingo-board#sync">
+        <header class="top-bar">
+            <div class="top-bar-logo">B</div>
+            <div class="top-bar-titles">
+                <div class="eyebrow">{{ bingo.year }}</div>
+                <h1 class="serif top-bar-title">{{ bingo.title }}</h1>
+            </div>
+            <div class="top-bar-progress">
+                <div class="top-bar-progress-text">
+                    <div class="eyebrow">Avancement</div>
+                    <div class="serif progress-fraction" data-bingo-board-target="progressFraction">
+                        {{ completed }}<span class="muted">/{{ total }}</span>
+                    </div>
                 </div>
-            {% endfor %}
-        </div>
-    </main>
+                <div class="progress-ring">
+                    <svg viewBox="0 0 36 36" width="56" height="56">
+                        <circle cx="18" cy="18" r="15.5" class="progress-ring-bg" />
+                        <circle cx="18" cy="18" r="15.5" class="progress-ring-fg"
+                            data-bingo-board-target="progressRing"
+                            stroke-dasharray="{{ dash }} 97.4" />
+                    </svg>
+                    <div class="progress-ring-label" data-bingo-board-target="progressLabel">{{ pct|round }}%</div>
+                </div>
+            </div>
+        </header>
+
+        <main class="bingo-page">
+            <section class="stat-row">
+                <div class="stat-chip">
+                    <div class="stat-chip-swatch" style="background: var(--p-lavender);"></div>
+                    <div>
+                        <div class="eyebrow">Cases faites</div>
+                        <div class="serif stat-chip-value" data-bingo-board-target="completedCount">{{ completed }}/{{ total }}</div>
+                    </div>
+                </div>
+                <div class="stat-chip">
+                    <div class="stat-chip-swatch" style="background: var(--p-peach);"></div>
+                    <div>
+                        <div class="eyebrow">Lignes complètes</div>
+                        <div class="serif stat-chip-value" data-bingo-board-target="completedLines">{{ completedLinesCount }}</div>
+                    </div>
+                </div>
+                <div class="stat-chip">
+                    <div class="stat-chip-swatch" style="background: var(--p-mint);"></div>
+                    <div>
+                        <div class="eyebrow">Reste à faire</div>
+                        <div class="serif stat-chip-value" data-bingo-board-target="remaining">{{ total - completed }}</div>
+                    </div>
+                </div>
+                <div class="stat-chip">
+                    <div class="stat-chip-swatch" style="background: var(--p-sky);"></div>
+                    <div>
+                        <div class="eyebrow">Année</div>
+                        <div class="serif stat-chip-value">{{ bingo.year }}</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bingo-card">
+                <div class="bingo-ribbon hand">✿ {{ bingo.title }}</div>
+                <div class="bingo-grid">
+                    {% for item in bingo.bingoItems %}
+                        <article data-controller="bingo-cell"
+                                 data-action="click->bingo-cell#toggle"
+                                 data-bingo-board-target="cell"
+                                 data-bingo-cell-url-value="{{ path('bingo_check', {id: item.id}) }}"
+                                 data-bingo-cell-active-value="{{ item.completedAt ? 'true' : 'false' }}"
+                                 data-bingo-cell-position-value="{{ item.position }}"
+                                 data-tone="{{ item.position % 5 }}"
+                                 class="bingo-cell{{ item.completedAt ? ' done' : '' }}{{ item.position in linePositions ? ' in-line' : '' }}">
+                            <div class="bingo-cell-top">
+                                <div class="bingo-cell-check">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="bingo-cell-body">
+                                <div class="bingo-cell-title">{{ item.label }}</div>
+                                {% if item.note %}
+                                    <div class="hand bingo-cell-note">{{ item.note }}</div>
+                                {% endif %}
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <p class="bingo-footnote">
+                <span class="hand bingo-footnote-mark">※</span>
+                Clique sur une case pour la cocher
+            </p>
+        </main>
+
+        <div class="confetti-layer" data-bingo-board-target="confettiLayer"></div>
+    </div>
 {% endblock %}

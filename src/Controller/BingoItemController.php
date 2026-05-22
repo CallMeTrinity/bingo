@@ -16,36 +16,31 @@ class BingoItemController extends AbstractController
     public function check(BingoItem $item, EntityManagerInterface $em, BingoChecker $bingoService): Response
     {
         $bingo = $item->getBingo();
+        $wasDone = $item->getCompletedAt() !== null;
 
-        $beforeLines = $bingoService->getCompletedLines($bingo);
-        $beforeColumns = $bingoService->getCompletedColumns($bingo);
-        $wasBingo = count($beforeLines) > 0 || count($beforeColumns) > 0;
-
-        if ($item->getCompletedAt() === null) {
-            $item->setCompletedAt(new \DateTimeImmutable());
-        } else {
+        if ($wasDone) {
             $item->setCompletedAt(null);
+        } else {
+            $item->setCompletedAt(new \DateTimeImmutable());
         }
 
         $em->flush();
 
-        $afterLines = $bingoService->getCompletedLines($bingo);
-        $afterColumns = $bingoService->getCompletedColumns($bingo);
-        $isBingo = count($afterLines) > 0 || count($afterColumns) > 0;
-
-        $newLines = array_values(array_filter($afterLines, fn($l) => !in_array($l, $beforeLines, true)));
-        $newColumns = array_values(array_filter($afterColumns, fn($c) => !in_array($c, $beforeColumns, true)));
-
-        $newlyCompleted = [];
-        foreach (array_merge($newLines, $newColumns) as $group) {
-            $newlyCompleted = array_merge($newlyCompleted, $group);
+        $linePositions = $bingoService->getLinePositions($bingo);
+        $completedLines = count($bingoService->getCompletedLines($bingo)) + count($bingoService->getCompletedColumns($bingo));
+        $completed = 0;
+        foreach ($bingo->getBingoItems() as $i) {
+            if ($i->getCompletedAt() !== null) {
+                $completed++;
+            }
         }
-        $newlyCompleted = array_values(array_unique($newlyCompleted));
 
         return $this->json([
-            'active' => $item->getCompletedAt() !== null,
-            'newlyCompleted' => $newlyCompleted,
-            'newlyBingo' => !$wasBingo && $isBingo,
+            'active' => !$wasDone,
+            'linePositions' => $linePositions,
+            'completedLines' => $completedLines,
+            'completed' => $completed,
+            'total' => count($bingo->getBingoItems()),
         ]);
     }
 
