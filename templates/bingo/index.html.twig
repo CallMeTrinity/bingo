@@ -4,70 +4,69 @@
 
 {% set pct = total > 0 ? (completed / total * 100) : 0 %}
 {% set dash = total > 0 ? (completed / total * 97.4) : 0 %}
+{% set tones = ['lavender', 'peach', 'mint', 'sky', 'butter'] %}
+{% set eyebrow = 'text-[11px] font-semibold tracking-widest uppercase text-ink-soft' %}
 
 {% block body %}
     <div data-controller="bingo-board"
          data-action="bingo-cell:updated->bingo-board#sync">
-        <header class="top-bar">
-            <div class="top-bar-logo">B</div>
-            <div class="top-bar-titles">
-                <div class="eyebrow">{{ bingo.year }}</div>
-                <h1 class="serif top-bar-title">{{ bingo.title }}</h1>
+
+        <header class="sticky top-0 z-50 flex items-center gap-4 px-7 py-5 border-b border-line-soft bg-cream/70 backdrop-blur-md">
+            <div class="w-9.5 h-9.5 rounded-xl bg-lavender flex items-center justify-center font-serif text-[22px] text-ink shadow-[0_2px_6px_-2px_rgba(42,38,64,.18),0_1px_0_rgba(255,255,255,.5)_inset]">
+                B
             </div>
-            <div class="top-bar-progress">
-                <div class="top-bar-progress-text">
-                    <div class="eyebrow">Avancement</div>
-                    <div class="serif progress-fraction" data-bingo-board-target="progressFraction">
-                        {{ completed }}<span class="muted">/{{ total }}</span>
+
+            <div class="flex-1">
+                <div class="{{ eyebrow }}">{{ bingo.year }}</div>
+                <h1 class="font-serif text-[26px] leading-tight mt-0.5">{{ bingo.title }}</h1>
+            </div>
+
+            <div class="flex items-center gap-3.5">
+                <div class="text-right">
+                    <div class="{{ eyebrow }}">Avancement</div>
+                    <div class="font-serif text-[22px]" data-bingo-board-target="progressFraction">
+                        {{ completed }}<span class="text-ink-faint">/{{ total }}</span>
                     </div>
                 </div>
-                <div class="progress-ring">
-                    <svg viewBox="0 0 36 36" width="56" height="56">
-                        <circle cx="18" cy="18" r="15.5" class="progress-ring-bg" />
-                        <circle cx="18" cy="18" r="15.5" class="progress-ring-fg"
-                            data-bingo-board-target="progressRing"
-                            stroke-dasharray="{{ dash }} 97.4" />
+                <div class="relative w-14 h-14">
+                    <svg viewBox="0 0 36 36" width="56" height="56" class="-rotate-90">
+                        <circle cx="18" cy="18" r="15.5" fill="none" stroke="var(--color-line)" stroke-width="3" />
+                        <circle cx="18" cy="18" r="15.5" fill="none" stroke="var(--color-lavender)" stroke-width="3" stroke-linecap="round"
+                                data-bingo-board-target="progressRing"
+                                stroke-dasharray="{{ dash }} 97.4" />
                     </svg>
-                    <div class="progress-ring-label" data-bingo-board-target="progressLabel">{{ pct|round }}%</div>
+                    <div class="absolute inset-0 flex items-center justify-center text-[13px] font-semibold" data-bingo-board-target="progressLabel">{{ pct|round }}%</div>
                 </div>
             </div>
         </header>
 
-        <main class="bingo-page">
-            <section class="stat-row">
-                <div class="stat-chip">
-                    <div class="stat-chip-swatch" style="background: var(--p-lavender);"></div>
-                    <div>
-                        <div class="eyebrow">Cases faites</div>
-                        <div class="serif stat-chip-value" data-bingo-board-target="completedCount">{{ completed }}/{{ total }}</div>
+        <main class="max-w-270 mx-auto px-7 pt-8 pb-20">
+            <section class="flex flex-wrap gap-3 mb-6">
+                {% for chip in [
+                    { label: 'Cases faites',     value: completed ~ '/' ~ total, swatch: 'bg-lavender', target: 'completedCount' },
+                    { label: 'Lignes complètes', value: completedLinesCount,     swatch: 'bg-peach',    target: 'completedLines' },
+                    { label: 'Reste à faire',    value: total - completed,       swatch: 'bg-mint',     target: 'remaining' },
+                    { label: 'Année',            value: bingo.year,              swatch: 'bg-sky',      target: null },
+                ] %}
+                    <div class="flex items-center gap-2.5 px-3.5 py-2.5 bg-paper border border-line-soft rounded-xl shadow-[0_2px_6px_-2px_rgba(42,38,64,.05)]">
+                        <div class="w-7 h-7 rounded-lg {{ chip.swatch }} shadow-[0_1px_0_rgba(255,255,255,.6)_inset]"></div>
+                        <div>
+                            <div class="{{ eyebrow }}">{{ chip.label }}</div>
+                            <div class="font-serif text-xl leading-none"
+                                {% if chip.target %}data-bingo-board-target="{{ chip.target }}"{% endif %}>
+                                {{ chip.value }}
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="stat-chip">
-                    <div class="stat-chip-swatch" style="background: var(--p-peach);"></div>
-                    <div>
-                        <div class="eyebrow">Lignes complètes</div>
-                        <div class="serif stat-chip-value" data-bingo-board-target="completedLines">{{ completedLinesCount }}</div>
-                    </div>
-                </div>
-                <div class="stat-chip">
-                    <div class="stat-chip-swatch" style="background: var(--p-mint);"></div>
-                    <div>
-                        <div class="eyebrow">Reste à faire</div>
-                        <div class="serif stat-chip-value" data-bingo-board-target="remaining">{{ total - completed }}</div>
-                    </div>
-                </div>
-                <div class="stat-chip">
-                    <div class="stat-chip-swatch" style="background: var(--p-sky);"></div>
-                    <div>
-                        <div class="eyebrow">Année</div>
-                        <div class="serif stat-chip-value">{{ bingo.year }}</div>
-                    </div>
-                </div>
+                {% endfor %}
             </section>
 
-            <section class="bingo-card">
-                <div class="bingo-ribbon hand">✿ {{ bingo.title }}</div>
-                <div class="bingo-grid">
+            <section class="relative bg-paper rounded-card-lg p-6 shadow-card border border-line-soft">
+                <div class="absolute -top-3.5 left-7 px-3.5 py-1 rounded-full bg-lavender text-ink font-hand text-lg -rotate-3 shadow-[0_4px_12px_-4px_rgba(42,38,64,.18)]">
+                    ✿ {{ bingo.title }}
+                </div>
+
+                <div class="grid grid-cols-4 gap-3">
                     {% for item in bingo.bingoItems %}
                         <article data-controller="bingo-cell"
                                  data-action="click->bingo-cell#toggle"
@@ -77,17 +76,19 @@
                                  data-bingo-cell-position-value="{{ item.position }}"
                                  data-tone="{{ item.position % 5 }}"
                                  class="bingo-cell{{ item.completedAt ? ' done' : '' }}{{ item.position in linePositions ? ' in-line' : '' }}">
-                            <div class="bingo-cell-top">
-                                <div class="bingo-cell-check">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <div class="flex justify-end">
+                                <div class="cell-check w-5.5 h-5.5 rounded-full border border-dashed border-ink-faint flex items-center justify-center transition-all duration-200">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3 opacity-0">
                                         <polyline points="20 6 9 17 4 12"/>
                                     </svg>
                                 </div>
                             </div>
-                            <div class="bingo-cell-body">
-                                <div class="bingo-cell-title">{{ item.label }}</div>
+                            <div class="mt-auto">
+                                <div class="cell-title text-[13px] font-semibold leading-tight text-ink text-pretty">{{ item.label }}</div>
                                 {% if item.note %}
-                                    <div class="hand bingo-cell-note">{{ item.note }}</div>
+                                    <div class="cell-note font-hand text-[15px] text-ink-soft mt-1 leading-tight line-clamp-2 opacity-0 transition-opacity duration-200">
+                                        {{ item.note }}
+                                    </div>
                                 {% endif %}
                             </div>
                         </article>
@@ -95,12 +96,12 @@
                 </div>
             </section>
 
-            <p class="bingo-footnote">
-                <span class="hand bingo-footnote-mark">※</span>
+            <p class="text-center mt-5 text-ink-soft text-[13px]">
+                <span class="font-hand text-lg text-lavender mr-1">※</span>
                 Clique sur une case pour la cocher
             </p>
         </main>
 
-        <div class="confetti-layer" data-bingo-board-target="confettiLayer"></div>
+        <div class="fixed inset-0 pointer-events-none z-9999" data-bingo-board-target="confettiLayer"></div>
     </div>
 {% endblock %}

@@ -1,2 +1,32 @@
 @import "tailwindcss";
 @import "./components/bingo.css";
+
+@theme {
+    --color-cream: #faf7f2;
+    --color-paper: #ffffff;
+    --color-ink: #2a2640;
+    --color-ink-soft: #6b6584;
+    --color-ink-faint: #b6b1c6;
+    --color-line: #ece8df;
+    --color-line-soft: #f3efe6;
+
+    --color-lavender: #cdb4db;
+    --color-peach: #ffc8dd;
+    --color-mint: #b8e0d2;
+    --color-sky: #bde0fe;
+    --color-butter: #fde4a6;
+
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-serif: 'Instrument Serif', 'Times New Roman', serif;
+    --font-hand: 'Caveat', cursive;
+
+    --radius-card: 18px;
+    --radius-card-lg: 26px;
+
+    --shadow-card: 0 1px 0 rgba(255, 255, 255, .9) inset, 0 6px 24px -10px rgba(42, 38, 64, .12), 0 2px 6px -2px rgba(42, 38, 64, .06);
+    --shadow-pop: 0 1px 0 rgba(255, 255, 255, .9) inset, 0 18px 50px -16px rgba(42, 38, 64, .28), 0 4px 12px -4px rgba(42, 38, 64, .12);
+
+    --animate-pop-in: pop-in 0.4s ease-out;
+    --animate-line-glow: line-glow 2s ease-in-out infinite;
+}
+

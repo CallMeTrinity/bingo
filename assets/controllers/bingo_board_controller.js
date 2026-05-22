@@ -42,7 +42,7 @@ export default class extends Controller {
 
     #fireConfetti(x, y) {
         const burst = document.createElement('div')
-        burst.className = 'confetti-burst'
+        burst.style.position = 'absolute'
         burst.style.left = `${x}px`
         burst.style.top = `${y}px`
 

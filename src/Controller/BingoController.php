@@ -10,6 +10,17 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class BingoController extends AbstractController
 {
+
+    #[Route('/', name: 'app_home')]
+    public function home(BingoRepository $br, BingoChecker $checker): Response
+    {
+        return $this->render('home.html.twig', [
+            'controller_name' => 'BingoController',
+            'completedLinesCount' => 0,
+            'linePositions' => [],
+            'completedDiagonalsCount' => 0,
+        ]);
+    }
     #[Route('/bingo/{year}', name: 'bingo_show')]
     public function index(int $year, BingoRepository $br, BingoChecker $checker): Response
     {
