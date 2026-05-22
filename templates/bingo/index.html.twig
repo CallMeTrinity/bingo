@@ -10,8 +10,14 @@
         <div class="bingo-grid">
             {% for item in bingo.bingoItems %}
 
-                <div class="bingo-cell" data-controller="bingo-cell" data-bingo-cell-target="cell"
-                     data-action="click->bingo-cell#mark">{{ item.label }}</div>
+                <div data-controller="bingo-cell"
+                     data-action="click->bingo-cell#toggle"
+                     data-bingo-cell-target="cell"
+                     data-bingo-cell-url-value="{{ path('bingo_check', {id: item.id}) }}"
+                     data-bingo-cell-active-value="{{ item.completedAt ? 'true' : 'false' }}"
+                     class="{{ item.completedAt ? 'active' : '' }}">
+                        {{ item.label }}
+                </div>
             {% endfor %}
         </div>
     </main>
