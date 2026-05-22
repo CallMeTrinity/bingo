@@ -15,6 +15,7 @@
                      data-bingo-cell-target="cell"
                      data-bingo-cell-url-value="{{ path('bingo_check', {id: item.id}) }}"
                      data-bingo-cell-active-value="{{ item.completedAt ? 'true' : 'false' }}"
+                     data-position="{{ item.position }}"
                      class="{{ item.completedAt ? 'active' : '' }}">
                         {{ item.label }}
                 </div>
