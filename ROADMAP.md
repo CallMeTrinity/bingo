@@ -19,7 +19,7 @@ Fait : `src/Entity/{Bingo,BingoItem}.php`, `src/DataFixtures/BingoFixtures.php`,
 
 ## ✅ Phase 2 — Interactivité
 
-Toggle d'une case sans rechargement via Stimulus + `fetch` JSON (pas Turbo). Détection serveur des lignes/colonnes/diagonales complètes.
+Toggle d'une case sans rechargement via Stimulus + `fetch` JSON (pas Turbo). Détection serveur des lignes/colonnes complètes.
 
 - `POST /bingo/{id}/check` → JSON `{ active, linePositions, completedLines, completed, total }`
 - `BingoChecker` : `getCompletedLines`, `getCompletedColumns`, `getLinePositions`, `hasBingo`

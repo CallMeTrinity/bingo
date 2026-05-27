@@ -57,16 +57,13 @@ final class BingoController extends AbstractController
     private function buildEntry(Bingo $bingo, BingoChecker $checker): array
     {
         $completedPositions = $checker->getCompletedPositions($bingo);
-        $completedLinesCount = count($checker->getCompletedLines($bingo))
-            + count($checker->getCompletedColumns($bingo))
-            + count($checker->getCompletedDiagonals($bingo));
 
         return [
             'bingo' => $bingo,
             'completed' => count($completedPositions),
             'total' => count($bingo->getBingoItems()),
             'completedPositions' => $completedPositions,
-            'completedLinesCount' => $completedLinesCount,
+            'completedLinesCount' => count($checker->getCompletedLines($bingo)) + count($checker->getCompletedColumns($bingo)),
             'hasBingo' => $checker->hasBingo($bingo),
         ];
     }

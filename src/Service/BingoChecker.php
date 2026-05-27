@@ -8,20 +8,11 @@ class BingoChecker
 {
 
     private const LINES = [
-        [0, 1, 2, 3], [4, 5, 6, 7], [8, 9, 10, 11], [12, 13, 14, 15]
+        [1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]
     ];
     private const COLUMNS = [
-        [0, 4, 8, 12], [1, 5, 9, 13], [2, 6, 10, 14], [3, 7, 11, 15]
+        [1, 5, 9, 13], [2, 6, 10, 14], [3, 7, 11, 15], [4, 8, 12, 16]
     ];
-    private const DIAGONALS = [
-        [0, 5, 10, 15], [3, 6, 9, 12]
-    ];
-
-    public function getCompletedDiagonals(Bingo $bingo): array
-    {
-        $completed = $this->getCompletedPositions($bingo);
-        return array_filter(self::DIAGONALS, fn($diagonal) => count(array_intersect($diagonal, $completed)) === 4);
-    }
 
     public function getCompletedPositions(Bingo $bingo): array
     {
@@ -57,7 +48,7 @@ class BingoChecker
     public function getLinePositions(Bingo $bingo): array
     {
         $positions = [];
-        foreach (array_merge($this->getCompletedLines($bingo), $this->getCompletedColumns($bingo), $this->getCompletedDiagonals($bingo)) as $group) {
+        foreach (array_merge($this->getCompletedLines($bingo), $this->getCompletedColumns($bingo)) as $group) {
             $positions = array_merge($positions, $group);
         }
         return array_values(array_unique($positions));
