@@ -6,8 +6,10 @@ use App\Repository\BingoRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: BingoRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Bingo
 {
     #[ORM\Id]
@@ -16,9 +18,13 @@ class Bingo
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'L\'année est requise.')]
+    #[Assert\Range(min: 1900, max: 2100, notInRangeMessage: 'L\'année doit être entre {{ min }} et {{ max }}.')]
     private ?int $year = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Le titre est requis.')]
+    #[Assert\Length(max: 255)]
     private ?string $title = null;
 
     #[ORM\Column(length: 8, unique: true)]
@@ -104,5 +110,13 @@ class Bingo
         }
 
         return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function generateSlug(): void
+    {
+        if ($this->slug === null) {
+            $this->slug = bin2hex(random_bytes(4));
+        }
     }
 }

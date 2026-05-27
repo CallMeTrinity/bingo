@@ -3,17 +3,40 @@
 namespace App\Controller;
 
 use App\Entity\Bingo;
+use App\Entity\BingoItem;
+use App\Form\BingoType;
 use App\Repository\BingoRepository;
 use App\Service\BingoChecker;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class BingoController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
-    public function home(BingoRepository $br, BingoChecker $checker): Response
+    private const GRID_SIZE = 16;
+
+    #[Route('/', name: 'app_home', methods: ['GET', 'POST'])]
+    public function home(Request $request, BingoRepository $br, BingoChecker $checker, EntityManagerInterface $em): Response
     {
+        $bingo = new Bingo();
+        $form = $this->createForm(BingoType::class, $bingo);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            for ($position = 1; $position <= self::GRID_SIZE; $position++) {
+                $item = new BingoItem();
+                $item->setLabel('');
+                $item->setPosition($position);
+                $bingo->addBingoItem($item);
+            }
+            $em->persist($bingo);
+            $em->flush();
+
+            return $this->redirectToRoute('bingo_show', ['year' => $bingo->getYear()]);
+        }
+
         $bingos = $br->findBy([], ['year' => 'DESC']);
 
         $entries = array_map(
@@ -23,10 +46,12 @@ final class BingoController extends AbstractController
 
         return $this->render('home.html.twig', [
             'entries' => $entries,
+            'form' => $form,
+            'openModal' => $form->isSubmitted(),
         ]);
     }
 
-    #[Route('/bingo/{year}', name: 'bingo_show')]
+    #[Route('/bingo/{year}cd w  ', name: 'bingo_show')]
     public function index(int $year, BingoRepository $br, BingoChecker $checker): Response
     {
         $bingo = $br->findOneBy(['year' => $year]);
