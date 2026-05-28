@@ -15,8 +15,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class BingoController extends AbstractController
 {
-    private const GRID_SIZE = 16;
-
     #[Route('/', name: 'app_home', methods: ['GET', 'POST'])]
     public function home(Request $request, BingoRepository $br, BingoChecker $checker, EntityManagerInterface $em): Response
     {
@@ -25,7 +23,8 @@ final class BingoController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            for ($position = 1; $position <= self::GRID_SIZE; $position++) {
+            $cellCount = $bingo->getSize() ** 2;
+            for ($position = 1; $position <= $cellCount; $position++) {
                 $item = new BingoItem();
                 $item->setLabel('');
                 $item->setPosition($position);
@@ -34,7 +33,7 @@ final class BingoController extends AbstractController
             $em->persist($bingo);
             $em->flush();
 
-            return $this->redirectToRoute('bingo_show', ['year' => $bingo->getYear()]);
+            return $this->redirectToRoute('bingo_show', ['slug' => $bingo->getSlug()]);
         }
 
         $bingos = $br->findBy([], ['year' => 'DESC']);
@@ -51,10 +50,10 @@ final class BingoController extends AbstractController
         ]);
     }
 
-    #[Route('/bingo/{year}cd w  ', name: 'bingo_show')]
-    public function index(int $year, BingoRepository $br, BingoChecker $checker): Response
+    #[Route('/bingo/{slug}', name: 'bingo_show')]
+    public function index(string $slug, BingoRepository $br, BingoChecker $checker): Response
     {
-        $bingo = $br->findOneBy(['year' => $year]);
+        $bingo = $br->findOneBy(['slug' => $slug]);
         if (!$bingo) {
             throw $this->createNotFoundException('Bingo not found');
         }

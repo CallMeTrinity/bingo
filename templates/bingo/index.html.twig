@@ -63,7 +63,7 @@
                     ✿ {{ bingo.title }}
                 </div>
 
-                <div class="grid grid-cols-4 gap-3">
+                <div class="grid gap-3" style="grid-template-columns: repeat({{ bingo.size }}, minmax(0, 1fr));">
                     {% for item in bingo.bingoItems %}
                         <article data-controller="bingo-cell"
                                  data-action="click->bingo-cell#toggle"

@@ -36,6 +36,9 @@ class Bingo
     #[ORM\OneToMany(targetEntity: BingoItem::class, mappedBy: 'bingo', cascade: ['persist', 'remove'])]
     private Collection $bingoItems;
 
+    #[ORM\Column(options: ['default' => 4])]
+    private ?int $size = 4;
+
     public function __construct()
     {
         $this->bingoItems = new ArrayCollection();
@@ -118,5 +121,17 @@ class Bingo
         if ($this->slug === null) {
             $this->slug = bin2hex(random_bytes(4));
         }
+    }
+
+    public function getSize(): ?int
+    {
+        return $this->size;
+    }
+
+    public function setSize(int $size): static
+    {
+        $this->size = $size;
+
+        return $this;
     }
 }

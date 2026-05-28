@@ -10,7 +10,7 @@
 {% set toneClasses = ['bg-lavender', 'bg-peach', 'bg-mint', 'bg-sky', 'bg-butter'] %}
 {% set completedSet = entry.completedPositions %}
 
-<a href="{{ path('bingo_show', {year: bingo.year}) }}"
+<a href="{{ path('bingo_show', {slug: bingo.slug}) }}"
    class="group relative flex flex-col gap-4 p-5 rounded-card-lg bg-paper border border-line-soft shadow-card transition-all duration-200 hover:-translate-y-1 hover:shadow-pop">
 
     <div class="flex items-start justify-between gap-3">
@@ -32,7 +32,8 @@
         {% endif %}
     </div>
 
-    <div class="grid grid-cols-4 gap-1.5 p-2 rounded-2xl bg-cream/60 border border-line-soft">
+    <div class="grid gap-1.5 p-2 rounded-2xl bg-cream/60 border border-line-soft"
+         style="grid-template-columns: repeat({{ bingo.size }}, minmax(0, 1fr));">
         {% for item in bingo.bingoItems %}
             {% set toneClass = toneClasses[(item.position - 1) % 5] %}
             {% set isDone = item.position in completedSet %}

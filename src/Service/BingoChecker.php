@@ -6,14 +6,6 @@ use App\Entity\Bingo;
 
 class BingoChecker
 {
-
-    private const LINES = [
-        [1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]
-    ];
-    private const COLUMNS = [
-        [1, 5, 9, 13], [2, 6, 10, 14], [3, 7, 11, 15], [4, 8, 12, 16]
-    ];
-
     public function getCompletedPositions(Bingo $bingo): array
     {
         $positions = [];
@@ -32,14 +24,16 @@ class BingoChecker
 
     public function getCompletedLines(Bingo $bingo): array
     {
+        $size = $bingo->getSize();
         $completed = $this->getCompletedPositions($bingo);
-        return array_filter(self::LINES, fn($line) => count(array_intersect($line, $completed)) === 4);
+        return array_filter($this->lines($size), fn($line) => count(array_intersect($line, $completed)) === $size);
     }
 
     public function getCompletedColumns(Bingo $bingo): array
     {
+        $size = $bingo->getSize();
         $completed = $this->getCompletedPositions($bingo);
-        return array_filter(self::COLUMNS, fn($column) => count(array_intersect($column, $completed)) === 4);
+        return array_filter($this->columns($size), fn($column) => count(array_intersect($column, $completed)) === $size);
     }
 
     /**
@@ -52,5 +46,37 @@ class BingoChecker
             $positions = array_merge($positions, $group);
         }
         return array_values(array_unique($positions));
+    }
+
+    /**
+     * @return list<list<int>>
+     */
+    private function lines(int $size): array
+    {
+        $lines = [];
+        for ($row = 0; $row < $size; $row++) {
+            $line = [];
+            for ($col = 0; $col < $size; $col++) {
+                $line[] = $row * $size + $col + 1;
+            }
+            $lines[] = $line;
+        }
+        return $lines;
+    }
+
+    /**
+     * @return list<list<int>>
+     */
+    private function columns(int $size): array
+    {
+        $columns = [];
+        for ($col = 0; $col < $size; $col++) {
+            $column = [];
+            for ($row = 0; $row < $size; $row++) {
+                $column[] = $row * $size + $col + 1;
+            }
+            $columns[] = $column;
+        }
+        return $columns;
     }
 }

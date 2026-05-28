@@ -19,7 +19,7 @@
             <div class="text-[11px] font-semibold tracking-widest uppercase text-ink-soft">Nouveau</div>
             <h2 class="font-serif text-[26px] leading-tight mt-0.5">Un nouveau bingo</h2>
             <p class="font-hand text-[18px] text-ink-soft mt-1.5 -rotate-1">
-                <span class="text-lavender">✦</span> Seize cases à imaginer.
+                <span class="text-lavender">✦</span> Une grille à imaginer.
             </p>
         </div>
 
@@ -31,10 +31,28 @@
                 {{ form_errors(form.title, { attr: { class: 'text-[12px] text-rose-600' } }) }}
             </div>
 
-            <div class="flex flex-col gap-1.5">
-                {{ form_label(form.year, null, { label_attr: { class: 'text-[11px] font-semibold tracking-widest uppercase text-ink-soft' } }) }}
-                {{ form_widget(form.year, { attr: { class: 'px-3.5 py-2.5 rounded-xl bg-cream/60 border border-line-soft focus:outline-none focus:border-lavender focus:bg-paper text-ink placeholder:text-ink-faint transition-colors w-32' } }) }}
-                {{ form_errors(form.year, { attr: { class: 'text-[12px] text-rose-600' } }) }}
+            <div class="flex gap-4">
+                <div class="flex flex-col gap-1.5">
+                    {{ form_label(form.year, null, { label_attr: { class: 'text-[11px] font-semibold tracking-widest uppercase text-ink-soft' } }) }}
+                    {{ form_widget(form.year, { attr: { class: 'px-3.5 py-2.5 rounded-xl bg-cream/60 border border-line-soft focus:outline-none focus:border-lavender focus:bg-paper text-ink placeholder:text-ink-faint transition-colors w-32' } }) }}
+                    {{ form_errors(form.year, { attr: { class: 'text-[12px] text-rose-600' } }) }}
+                </div>
+
+                <div class="flex flex-col gap-1.5 flex-1">
+                    {{ form_label(form.size, null, { label_attr: { class: 'text-[11px] font-semibold tracking-widest uppercase text-ink-soft' } }) }}
+                    <div class="flex gap-2 size-picker">
+                        {% for child in form.size %}
+                            <div class="flex-1">
+                                {{ form_widget(child, { attr: { class: 'sr-only peer' } }) }}
+                                <label for="{{ child.vars.id }}"
+                                       class="block text-center px-3.5 py-2.5 rounded-xl bg-cream/60 border border-line-soft text-ink-soft font-semibold cursor-pointer hover:bg-paper hover:text-ink transition-colors peer-checked:bg-lavender peer-checked:text-ink peer-checked:border-lavender peer-checked:shadow-[0_1px_0_rgba(255,255,255,.6)_inset]">
+                                    {{ child.vars.label }}
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {{ form_errors(form.size, { attr: { class: 'text-[12px] text-rose-600' } }) }}
+                </div>
             </div>
 
             {{ form_errors(form) }}
