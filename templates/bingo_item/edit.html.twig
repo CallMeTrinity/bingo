@@ -1,0 +1,55 @@
+{#
+    Fragment HTML injecté dans la modale d'édition (cf. modal_controller#edit).
+    Params:
+      form: FormView for BingoItemType
+      item: BingoItem (en cours d'édition)
+#}
+{{ form_start(form, {
+    action: path('bingo_item_edit', { id: item.id }),
+    attr: {
+        class: 'flex flex-col gap-4',
+        novalidate: 'novalidate',
+        'data-action': 'submit->modal#submit',
+    }
+}) }}
+
+    <div class="flex flex-col gap-1.5">
+        {{ form_label(form.label, null, { label_attr: { class: 'text-[11px] font-semibold tracking-widest uppercase text-ink-soft' } }) }}
+        {{ form_widget(form.label, { attr: { class: 'px-3.5 py-2.5 rounded-xl bg-cream/60 border border-line-soft focus:outline-none focus:border-lavender focus:bg-paper text-ink placeholder:text-ink-faint transition-colors' } }) }}
+        {{ form_errors(form.label, { attr: { class: 'text-[12px] text-rose-600' } }) }}
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+        {{ form_label(form.note, null, { label_attr: { class: 'text-[11px] font-semibold tracking-widest uppercase text-ink-soft' } }) }}
+        {{ form_widget(form.note, { attr: { class: 'px-3.5 py-2.5 rounded-xl bg-cream/60 border border-line-soft focus:outline-none focus:border-lavender focus:bg-paper text-ink placeholder:text-ink-faint transition-colors font-hand text-[16px] leading-snug resize-none' } }) }}
+        {{ form_errors(form.note, { attr: { class: 'text-[12px] text-rose-600' } }) }}
+    </div>
+
+    <div class="flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl bg-cream/60 border border-line-soft">
+        <div class="flex items-center gap-2.5">
+            {{ form_widget(form.completed, { attr: { class: 'w-4 h-4 accent-lavender cursor-pointer' } }) }}
+            {{ form_label(form.completed, null, { label_attr: { class: 'text-[14px] text-ink cursor-pointer select-none' } }) }}
+        </div>
+        {% if item.completedAt %}
+            <span class="text-[12px] text-ink-soft">
+                <span class="font-hand text-lavender mr-0.5">✓</span>
+                <time datetime="{{ item.completedAt|date('c') }}">{{ item.completedAt|date('d/m/Y') }}</time>
+            </span>
+        {% endif %}
+    </div>
+
+    {{ form_errors(form) }}
+
+    <div class="flex items-center justify-end gap-2.5 mt-2">
+        <button type="button"
+                data-action="modal#close"
+                class="px-4 py-2.5 rounded-xl text-ink-soft hover:text-ink hover:bg-cream transition-colors cursor-pointer">
+            Annuler
+        </button>
+        <button type="submit"
+                class="px-4 py-2.5 rounded-xl bg-lavender text-ink font-semibold shadow-[0_1px_0_rgba(255,255,255,.6)_inset,0_4px_12px_-4px_rgba(42,38,64,.18)] hover:-translate-y-0.5 transition-transform cursor-pointer">
+            Sauvegarder
+        </button>
+    </div>
+
+{{ form_end(form) }}

@@ -1,3 +1,5 @@
+###> ai/agents ###
+.claude/
 
 ###> symfony/framework-bundle ###
 /.env.local

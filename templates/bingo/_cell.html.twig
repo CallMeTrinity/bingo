@@ -1,0 +1,37 @@
+{#
+    Cellule réutilisable.
+    Params:
+      item: BingoItem
+      linePositions: int[] positions appartenant à une ligne/colonne complète
+#}
+<article data-controller="bingo-cell"
+         data-action="click->bingo-cell#toggle"
+         data-bingo-board-target="cell"
+         data-bingo-cell-url-value="{{ path('bingo_check', {id: item.id}) }}"
+         data-bingo-cell-active-value="{{ item.completedAt ? 'true' : 'false' }}"
+         data-bingo-cell-position-value="{{ item.position }}"
+         data-tone="{{ item.position % 5 }}"
+         class="bingo-cell group{{ item.completedAt ? ' done' : '' }}{{ item.position in linePositions ? ' in-line' : '' }} relative">
+    <div class="flex justify-end">
+        <div class="cell-check w-5.5 h-5.5 rounded-full border border-dashed border-ink-faint flex items-center justify-center transition-all duration-200">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3 opacity-0">
+                <polyline points="20 6 9 17 4 12"/>
+            </svg>
+        </div>
+    </div>
+    <div class="mt-auto">
+        <div class="cell-title text-[13px] font-semibold leading-tight text-ink text-pretty">{{ item.label }}</div>
+        {% if item.note %}
+            <div class="cell-note font-hand text-[15px] text-ink-soft mt-1 leading-tight line-clamp-2 opacity-0 transition-opacity duration-200">
+                {{ item.note }}
+            </div>
+        {% endif %}
+    </div>
+    <button type="button"
+            data-action="click->modal#edit"
+            data-modal-id-param="{{ item.id }}"
+            aria-label="Éditer la case"
+            class="absolute bottom-1.5 right-1.5 w-7 h-7 rounded-full bg-paper/80 border border-line-soft text-ink-soft text-[14px] flex items-center justify-center opacity-0 group-hover:opacity-100 focus-visible:opacity-100 hover:text-ink hover:bg-paper transition-opacity cursor-pointer">
+        ✎
+    </button>
+</article>

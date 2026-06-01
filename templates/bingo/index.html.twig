@@ -7,7 +7,7 @@
 {% set eyebrow = 'text-[11px] font-semibold tracking-widest uppercase text-ink-soft' %}
 
 {% block body %}
-    <div data-controller="bingo-board"
+    <div data-controller="bingo-board modal"
          data-action="bingo-cell:updated->bingo-board#sync">
 
         {% embed 'components/header.html.twig' %}
@@ -65,30 +65,7 @@
 
                 <div class="grid gap-3" style="grid-template-columns: repeat({{ bingo.size }}, minmax(0, 1fr));">
                     {% for item in bingo.bingoItems %}
-                        <article data-controller="bingo-cell"
-                                 data-action="click->bingo-cell#toggle"
-                                 data-bingo-board-target="cell"
-                                 data-bingo-cell-url-value="{{ path('bingo_check', {id: item.id}) }}"
-                                 data-bingo-cell-active-value="{{ item.completedAt ? 'true' : 'false' }}"
-                                 data-bingo-cell-position-value="{{ item.position }}"
-                                 data-tone="{{ item.position % 5 }}"
-                                 class="bingo-cell{{ item.completedAt ? ' done' : '' }}{{ item.position in linePositions ? ' in-line' : '' }}">
-                            <div class="flex justify-end">
-                                <div class="cell-check w-5.5 h-5.5 rounded-full border border-dashed border-ink-faint flex items-center justify-center transition-all duration-200">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3 opacity-0">
-                                        <polyline points="20 6 9 17 4 12"/>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="mt-auto">
-                                <div class="cell-title text-[13px] font-semibold leading-tight text-ink text-pretty">{{ item.label }}</div>
-                                {% if item.note %}
-                                    <div class="cell-note font-hand text-[15px] text-ink-soft mt-1 leading-tight line-clamp-2 opacity-0 transition-opacity duration-200">
-                                        {{ item.note }}
-                                    </div>
-                                {% endif %}
-                            </div>
-                        </article>
+                        {{ include('bingo/_cell.html.twig', { item: item, linePositions: linePositions }, with_context = false) }}
                     {% endfor %}
                 </div>
             </section>
@@ -100,5 +77,7 @@
         </main>
 
         <div class="fixed inset-0 pointer-events-none z-9999" data-bingo-board-target="confettiLayer"></div>
+
+        {{ include('components/edit-bingo-item-modal.html.twig', with_context = false) }}
     </div>
 {% endblock %}

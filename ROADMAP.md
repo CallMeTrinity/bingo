@@ -42,32 +42,16 @@ Fichiers : `assets/styles/components/bingo.css`, `assets/controllers/bingo_{cell
 
 ---
 
-## 🚧 Phase 4 — Multi-bingo (accueil + création)
+## ✅ Phase 4 — Multi-bingo (accueil + création)
 
 **Objectif** : page d'accueil qui liste tous les bingos, bouton « Nouveau bingo ».
-
-### 4.1 Route `/` — liste
-
-```php
-#[Route('/', name: 'home')]
-public function home(BingoRepository $repo, BingoChecker $checker): Response
-```
 
 Template `templates/home.html.twig` : grille de cartes avec, pour chaque bingo :
 - mini-preview de la grille (les cases done colorées via `cellTone(position)`)
 - chip année, titre, sous-titre, taille
 - barre de progression dégradée + `x/16 faits · y%`
-
 Carte « + Nouveau bingo » en dashed border à la fin.
-
-### 4.2 Création — modale ou page dédiée
-
 Form Symfony `BingoType` : `title`, `year`, taille (3/4/5 ; voir 4.3 pour le support multi-taille). Génération du `slug` en `PrePersist` (déjà documenté dans l'entité).
-
-À la création : générer N² `BingoItem` vides (`label = ''`, `position = 0..N²-1`). Redirige sur `/bingo/{year}` pour les remplir.
-
-### 4.3 Taille de grille variable (optionnel mais conseillé avant 4.2)
-
 Aujourd'hui `BingoChecker::LINES` et `COLUMNS` sont en dur pour du 4×4. Pour supporter 3/4/5 :
 - Ajouter `Bingo::$size` (int, default 4), migration
 - Calculer `LINES`/`COLUMNS` dynamiquement à partir de `$bingo->getSize()`
@@ -75,34 +59,13 @@ Aujourd'hui `BingoChecker::LINES` et `COLUMNS` sont en dur pour du 4×4. Pour su
 
 ---
 
-## 🚧 Phase 5 — Édition d'une case
-
-**Objectif** : éditer le `label` et la `note` d'une case (et marquer fait/non-fait depuis la modale).
-
-### 5.1 Route + modale
-
-`GET /bingo/item/{id}/edit` → fragment HTML inséré dans un `<dialog>` côté front.
-`POST /bingo/item/{id}` → met à jour, renvoie le partial cellule + recompute stats.
-
-### 5.2 Modal côté Stimulus
+## ✅ Phase 5 — Édition d'une case
 
 Nouveau `cell_edit_modal_controller` qui :
 - ouvre la modale au clic sur un bouton crayon visible au hover de la cellule
 - contient les champs `label` (input), `note` (textarea, police Caveat), checkbox « fait »
 - POST en `fetch`, remplace le HTML de la cellule par la réponse, ferme la modale
-
-Le design original a aussi un picker emoji par case — voir Phase 7.4 si on ajoute le champ emoji à `BingoItem`.
-
-### 5.3 Date de complétion affichée
-
 Aujourd'hui `completedAt` est stocké mais pas affiché. Dans la cellule ou la modale :
-```twig
-{% if item.completedAt %}
-    <time>{{ item.completedAt|date('d/m/Y') }}</time>
-{% endif %}
-```
-
----
 
 ## 🚧 Phase 6 — Partage
 

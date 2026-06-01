@@ -1,0 +1,30 @@
+{#
+    Coquille de la modale d'édition d'une case.
+    Le contenu (formulaire) est injecté à la volée par modal_controller#edit
+    dans le target `content` après un GET sur /bingo/item/{id}/edit.
+#}
+<dialog data-modal-target="dialog"
+        data-action="click->modal#backdropClose"
+        class="rounded-card-lg bg-paper border border-line-soft shadow-pop p-0 backdrop:bg-ink/40 backdrop:backdrop-blur-sm m-auto w-[min(92vw,460px)] open:animate-pop-in">
+
+    <div class="relative p-7">
+        <button type="button"
+                data-action="modal#close"
+                aria-label="Fermer"
+                class="absolute top-3.5 right-3.5 w-9 h-9 rounded-full border border-line-soft bg-paper text-ink-soft hover:text-ink hover:bg-cream transition-colors flex items-center justify-center text-xl leading-none cursor-pointer">
+            <span>×</span>
+        </button>
+
+        <div class="mb-6">
+            <div class="text-[11px] font-semibold tracking-widest uppercase text-ink-soft">Édition</div>
+            <h2 class="font-serif text-[26px] leading-tight mt-0.5">Une case</h2>
+            <p class="font-hand text-[18px] text-ink-soft mt-1.5 -rotate-1">
+                <span class="text-lavender">✦</span> Affine la résolution.
+            </p>
+        </div>
+
+        <div data-modal-target="content">
+            {# form injecté ici #}
+        </div>
+    </div>
+</dialog>
