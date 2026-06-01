@@ -1,0 +1,89 @@
+/* ============================================
+   Boutons — système BEM-style
+   .btn .btn--variant .btn--size .btn--icon
+   ============================================ */
+
+/* Base : structure + comportement communs */
+.btn {
+    @apply inline-flex items-center justify-center gap-2
+           px-4 py-2.5 rounded-xl
+           text-[14px] font-semibold leading-none
+           border border-transparent
+           cursor-pointer transition-all duration-200;
+}
+
+.btn:focus-visible {
+    @apply outline-none ring-2 ring-butter ring-offset-2 ring-offset-cream;
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+    @apply opacity-50 cursor-not-allowed pointer-events-none;
+}
+
+/* ─── Variantes de couleur ──────────────────── */
+
+/* Primary : CTA principal (submit, action positive) */
+.btn--primary {
+    @apply bg-lavender text-ink
+           shadow-[0_1px_0_rgba(255,255,255,.6)_inset,0_4px_12px_-4px_rgba(42,38,64,.18)];
+}
+.btn--primary:hover {
+    @apply -translate-y-0.5;
+}
+
+/* Secondary : action discrète, navigation, fermeture */
+.btn--secondary {
+    @apply bg-paper border-line-soft text-ink-soft;
+}
+.btn--secondary:hover {
+    @apply text-ink bg-cream;
+}
+
+/* Ghost : action très discrète (cancel, dismiss) */
+.btn--ghost {
+    @apply bg-transparent text-ink-soft;
+}
+.btn--ghost:hover {
+    @apply text-ink bg-cream;
+}
+
+/* Success : action positive (restaurer, valider une étape) */
+.btn--success {
+    @apply bg-mint/60 border-line-soft text-ink;
+}
+.btn--success:hover {
+    @apply bg-mint;
+}
+
+/* Danger : action destructive (supprimer, détruire) */
+.btn--danger {
+    @apply bg-paper border-line-soft text-ink-soft;
+}
+.btn--danger:hover {
+    @apply text-rose-700 bg-rose-50 border-rose-200;
+}
+
+/* ─── Tailles ───────────────────────────────── */
+
+.btn--sm {
+    @apply px-3 py-1.5 text-[13px] rounded-lg;
+}
+
+.btn--lg {
+    @apply px-5 py-3 text-[15px] rounded-2xl;
+}
+
+/* ─── Icon button (carré rond, juste une icône) ── */
+
+.btn--icon {
+    @apply w-9 h-9 p-0 rounded-full text-lg leading-none;
+}
+
+.btn--icon.btn--sm {
+    @apply w-7 h-7;
+}
+
+.btn--icon.btn--lg {
+    @apply w-11 h-11;
+}

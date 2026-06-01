@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./components/bingo.css";
+@import "./components/btn.css";
 
 @theme {
     --color-cream: #faf7f2;

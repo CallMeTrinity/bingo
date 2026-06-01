@@ -24,6 +24,14 @@
                             {{ completed }}<span class="text-ink-faint">/{{ total }}</span>
                         </div>
                     </div>
+                    <div data-controller="modal" class="flex items-center">
+                        <button type="button"
+                                data-action="modal#open"
+                                class="btn btn--secondary btn--sm">
+                            Partager
+                        </button>
+                        {{ include('components/_share_panel.html.twig', { bingo: bingo }, with_context = false) }}
+                    </div>
                     <div class="relative w-14 h-14">
                         <svg viewBox="0 0 36 36" width="56" height="56" class="-rotate-90">
                             <circle cx="18" cy="18" r="15.5" fill="none" stroke="var(--color-line)" stroke-width="3" />
@@ -58,7 +66,7 @@
                 {% endfor %}
             </section>
 
-            {{ include('bingo/_grid.html.twig', { bingo: bingo, linePositions: linePositions, readOnly: false }) }}
+            {{ include('bingo/_grid.html.twig', { bingo: bingo, linePositions: linePositions, readOnly: readOnly }) }}
 
             <p class="text-center mt-5 text-ink-soft text-[13px]">
                 <span class="font-hand text-lg text-lavender mr-1">※</span>

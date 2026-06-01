@@ -11,7 +11,7 @@
         <button type="button"
                 data-action="modal#close"
                 aria-label="Fermer"
-                class="absolute top-3.5 right-3.5 w-9 h-9 rounded-full border border-line-soft bg-paper text-ink-soft hover:text-ink hover:bg-cream transition-colors flex items-center justify-center text-xl leading-none cursor-pointer">
+                class="btn btn--secondary btn--icon absolute top-3.5 right-3.5">
             ×
         </button>
 
@@ -58,13 +58,10 @@
             {{ form_errors(form) }}
 
             <div class="flex items-center justify-end gap-2.5 mt-2">
-                <button type="button"
-                        data-action="modal#close"
-                        class="px-4 py-2.5 rounded-xl text-ink-soft hover:text-ink hover:bg-cream transition-colors cursor-pointer">
+                <button type="button" data-action="modal#close" class="btn btn--ghost">
                     Annuler
                 </button>
-                <button type="submit"
-                        class="px-4 py-2.5 rounded-xl bg-lavender text-ink font-semibold shadow-[0_1px_0_rgba(255,255,255,.6)_inset,0_4px_12px_-4px_rgba(42,38,64,.18)] hover:-translate-y-0.5 transition-transform cursor-pointer">
+                <button type="submit" class="btn btn--primary">
                     Créer le bingo
                 </button>
             </div>

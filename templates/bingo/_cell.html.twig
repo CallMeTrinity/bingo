@@ -4,6 +4,8 @@ Params:
   item: BingoItem
   linePositions: int[] positions appartenant à une ligne/colonne complète
 #}
+{% set readOnly = readOnly ?? false %}
+
 <article
     {% if not readOnly %}
         data-controller="bingo-cell"
@@ -38,7 +40,7 @@ Params:
             data-action="click->modal#edit"
             data-modal-id-param="{{ item.id }}"
             aria-label="Éditer la case"
-            class="absolute bottom-1.5 right-1.5 w-7 h-7 rounded-full bg-paper/80 border border-line-soft text-ink-soft text-[14px] flex items-center justify-center opacity-0 group-hover:opacity-100 focus-visible:opacity-100 hover:text-ink hover:bg-paper transition-opacity cursor-pointer">
+            class="btn btn--secondary btn--icon btn--sm absolute bottom-1.5 right-1.5 opacity-0 group-hover:opacity-100 focus-visible:opacity-100">
         ✎
     </button>
     {% endif %}

@@ -12,12 +12,11 @@
         {% endblock %}
 
         {% block header_right %}
-            <a href="{{ path('app_home') }}"
-               class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-line-soft bg-paper text-ink-soft hover:text-ink hover:bg-cream transition-colors">
+            <a href="{{ path('app_home') }}" class="btn btn--secondary btn--sm">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
                     <polyline points="15 18 9 12 15 6"/>
                 </svg>
-                <span class="text-[13px] font-semibold">Retour</span>
+                Retour
             </a>
         {% endblock %}
     {% endembed %}
@@ -83,8 +82,7 @@
                                   action="{{ path('bingo_restore', {slug: bingo.slug}) }}"
                                   class="flex-1">
                                 <input type="hidden" name="_token" value="{{ csrf_token('restore_bingo_' ~ bingo.slug) }}">
-                                <button type="submit"
-                                        class="w-full inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-mint/60 border border-line-soft text-ink font-semibold hover:bg-mint transition-colors cursor-pointer">
+                                <button type="submit" class="btn btn--success w-full">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
                                         <polyline points="1 4 1 10 7 10"/>
                                         <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
@@ -100,8 +98,7 @@
                                   data-action="submit->confirm#submit"
                                   class="flex-1">
                                 <input type="hidden" name="_token" value="{{ csrf_token('destroy_bingo_' ~ bingo.slug) }}">
-                                <button type="submit"
-                                        class="w-full inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-paper border border-line-soft text-ink-soft hover:text-rose-700 hover:bg-rose-50 hover:border-rose-200 transition-colors cursor-pointer">
+                                <button type="submit" class="btn btn--danger w-full">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
                                         <polyline points="3 6 5 6 21 6"/>
                                         <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
