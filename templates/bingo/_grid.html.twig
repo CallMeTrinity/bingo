@@ -1,0 +1,11 @@
+<section class="relative bg-paper rounded-card-lg p-6 shadow-card border border-line-soft">
+    <div class="absolute -top-3.5 left-7 px-3.5 py-1 rounded-full bg-lavender text-ink font-hand text-lg -rotate-3 shadow-[0_4px_12px_-4px_rgba(42,38,64,.18)]">
+        ✿ {{ bingo.title }}
+    </div>
+
+    <div class="grid gap-3" style="grid-template-columns: repeat({{ bingo.size }}, minmax(0, 1fr));">
+        {% for item in bingo.bingoItems %}
+            {{ include('bingo/_cell.html.twig', { item: item, linePositions: linePositions, readOnly: readOnly }, with_context = false) }}
+        {% endfor %}
+    </div>
+</section>

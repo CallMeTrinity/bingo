@@ -126,6 +126,29 @@ final class BingoController extends AbstractController
     #[Route('/bingo/{slug}', name: 'bingo_show')]
     public function index(string $slug, BingoRepository $br, BingoChecker $checker): Response
     {
+        $bingoData = $this->loadBingoView($slug, $br);
+
+        return $this->render('bingo/index.html.twig', [
+            ...$bingoData,
+            'completedLinesCount' => count($checker->getCompletedLines($bingoData['bingo'])) + count($checker->getCompletedColumns($bingoData['bingo'])),
+            'linePositions' => $checker->getLinePositions($bingoData['bingo']),
+        ]);
+    }
+
+    #[Route('/b/{slug}', name: 'bingo_share')]
+    public function share(string $slug, BingoRepository $br, BingoChecker $checker): Response
+    {
+        $bingoData = $this->loadBingoView($slug, $br);
+
+        return $this->render('bingo/share.html.twig', [
+            ...$bingoData,
+            'completedLinesCount' => count($checker->getCompletedLines($bingoData['bingo'])) + count($checker->getCompletedColumns($bingoData['bingo'])),
+            'linePositions' => $checker->getLinePositions($bingoData['bingo']),
+        ]);
+    }
+
+    private function loadBingoView(string $slug, BingoRepository $br): array
+    {
         $bingo = $br->findOneActiveBySlug($slug);
         if (!$bingo) {
             throw $this->createNotFoundException('Bingo not found');
@@ -138,16 +161,8 @@ final class BingoController extends AbstractController
                 $completed++;
             }
         }
-
-        return $this->render('bingo/index.html.twig', [
-            'bingo' => $bingo,
-            'completed' => $completed,
-            'total' => count($items),
-            'completedLinesCount' => count($checker->getCompletedLines($bingo)) + count($checker->getCompletedColumns($bingo)),
-            'linePositions' => $checker->getLinePositions($bingo),
-        ]);
+        return ['bingo' => $bingo, 'completed' => $completed, 'total' => count($items)];
     }
-
     /**
      * @return array{bingo: Bingo, completed: int, total: int, completedPositions: int[], completedLinesCount: int, hasBingo: bool}
      */

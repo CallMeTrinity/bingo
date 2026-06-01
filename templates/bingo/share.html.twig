@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bingo {{ bingo.year }}{% endblock %}
+
+
+
+{% block body %}
+    <header class="px-7 py-5 border-b border-line-soft">
+        <div>{{ bingo.year }}</div>
+        <h1 class="font-serif text-2xl">{{ bingo.title }}</h1>
+    </header>
+        <main class="max-w-270 mx-auto px-7 pt-8 pb-20">
+            {{ include('bingo/_grid.html.twig', { bingo: bingo, linePositions: linePositions, readOnly: true }) }}
+        </main>
+
+{% endblock %}
