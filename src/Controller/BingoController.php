@@ -130,6 +130,7 @@ final class BingoController extends AbstractController
 
         return $this->render('bingo/index.html.twig', [
             ...$bingoData,
+            'readOnly' => false,
             'completedLinesCount' => count($checker->getCompletedLines($bingoData['bingo'])) + count($checker->getCompletedColumns($bingoData['bingo'])),
             'linePositions' => $checker->getLinePositions($bingoData['bingo']),
         ]);
@@ -142,6 +143,7 @@ final class BingoController extends AbstractController
 
         return $this->render('bingo/share.html.twig', [
             ...$bingoData,
+            'readOnly' => true,
             'completedLinesCount' => count($checker->getCompletedLines($bingoData['bingo'])) + count($checker->getCompletedColumns($bingoData['bingo'])),
             'linePositions' => $checker->getLinePositions($bingoData['bingo']),
         ]);
