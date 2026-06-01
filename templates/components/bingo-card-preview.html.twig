@@ -10,49 +10,72 @@
 {% set toneClasses = ['bg-lavender', 'bg-peach', 'bg-mint', 'bg-sky', 'bg-butter'] %}
 {% set completedSet = entry.completedPositions %}
 
-<a href="{{ path('bingo_show', {slug: bingo.slug}) }}"
-   class="group relative flex flex-col gap-4 p-5 rounded-card-lg bg-paper border border-line-soft shadow-card transition-all duration-200 hover:-translate-y-1 hover:shadow-pop">
+<article class="relative group">
+    <a href="{{ path('bingo_show', {slug: bingo.slug}) }}"
+       class="flex flex-col gap-4 p-5 rounded-card-lg bg-paper border border-line-soft shadow-card transition-all duration-200 hover:-translate-y-1 hover:shadow-pop">
 
-    <div class="flex items-start justify-between gap-3">
-        <div class="flex flex-col gap-1.5 min-w-0">
-            <span class="inline-flex items-center self-start px-2.5 py-0.5 rounded-full bg-lavender text-[11px] font-semibold tracking-wide text-ink shadow-[0_1px_0_rgba(255,255,255,.6)_inset]">
-                {{ bingo.year }}
-            </span>
-            <h2 class="font-serif text-[22px] leading-tight truncate">{{ bingo.title }}</h2>
-            <p class="text-[12px] text-ink-soft">
-                {{ total }} cases
-                {% if entry.completedLinesCount > 0 %}
-                    · <span class="text-ink">{{ entry.completedLinesCount }} ligne{{ entry.completedLinesCount > 1 ? 's' : '' }} ✦</span>
-                {% endif %}
-            </p>
+        <div class="flex items-start justify-between gap-3">
+            <div class="flex flex-col gap-1.5 min-w-0">
+                <span class="inline-flex items-center self-start px-2.5 py-0.5 rounded-full bg-lavender text-[11px] font-semibold tracking-wide text-ink shadow-[0_1px_0_rgba(255,255,255,.6)_inset]">
+                    {{ bingo.year }}
+                </span>
+                <h2 class="font-serif text-[22px] leading-tight truncate">{{ bingo.title }}</h2>
+                <p class="text-[12px] text-ink-soft">
+                    {{ total }} cases
+                    {% if entry.completedLinesCount > 0 %}
+                        · <span class="text-ink">{{ entry.completedLinesCount }} ligne{{ entry.completedLinesCount > 1 ? 's' : '' }} ✦</span>
+                    {% endif %}
+                </p>
+            </div>
+
+            {% if entry.hasBingo %}
+                <span class="font-hand text-[22px] text-lavender -rotate-3 shrink-0">Bingo !</span>
+            {% endif %}
         </div>
 
-        {% if entry.hasBingo %}
-            <span class="font-hand text-[22px] text-lavender -rotate-3 shrink-0">Bingo !</span>
-        {% endif %}
-    </div>
-
-    <div class="grid gap-1.5 p-2 rounded-2xl bg-cream/60 border border-line-soft"
-         style="grid-template-columns: repeat({{ bingo.size }}, minmax(0, 1fr));">
-        {% for item in bingo.bingoItems %}
-            {% set toneClass = toneClasses[(item.position - 1) % 5] %}
-            {% set isDone = item.position in completedSet %}
-            <div class="aspect-square rounded-md border border-line-soft {{ isDone ? toneClass ~ ' shadow-[0_1px_0_rgba(255,255,255,.6)_inset]' : 'bg-paper/70' }}"
-                 aria-hidden="true"></div>
-        {% endfor %}
-    </div>
-
-    <div>
-        <div class="flex items-baseline justify-between mb-1.5">
-            <span class="font-serif text-[18px]">
-                {{ completed }}<span class="text-ink-faint">/{{ total }}</span>
-                <span class="text-[12px] text-ink-soft ml-1">faits</span>
-            </span>
-            <span class="text-[11px] font-semibold tracking-widest uppercase text-ink-soft">{{ pct|round }}%</span>
+        <div class="grid gap-1.5 p-2 rounded-2xl bg-cream/60 border border-line-soft"
+             style="grid-template-columns: repeat({{ bingo.size }}, minmax(0, 1fr));">
+            {% for item in bingo.bingoItems %}
+                {% set toneClass = toneClasses[(item.position - 1) % 5] %}
+                {% set isDone = item.position in completedSet %}
+                <div class="aspect-square rounded-md border border-line-soft {{ isDone ? toneClass ~ ' shadow-[0_1px_0_rgba(255,255,255,.6)_inset]' : 'bg-paper/70' }}"
+                     aria-hidden="true"></div>
+            {% endfor %}
         </div>
-        <div class="h-2 rounded-full bg-line-soft overflow-hidden">
-            <div class="h-full rounded-full bg-linear-to-r from-lavender via-peach to-mint transition-[width] duration-500"
-                 style="width: {{ pct }}%"></div>
+
+        <div>
+            <div class="flex items-baseline justify-between mb-1.5">
+                <span class="font-serif text-[18px]">
+                    {{ completed }}<span class="text-ink-faint">/{{ total }}</span>
+                    <span class="text-[12px] text-ink-soft ml-1">faits</span>
+                </span>
+                <span class="text-[11px] font-semibold tracking-widest uppercase text-ink-soft">{{ pct|round }}%</span>
+            </div>
+            <div class="h-2 rounded-full bg-line-soft overflow-hidden">
+                <div class="h-full rounded-full bg-linear-to-r from-lavender via-peach to-mint transition-[width] duration-500"
+                     style="width: {{ pct }}%"></div>
+            </div>
         </div>
-    </div>
-</a>
+    </a>
+
+    <form method="post"
+          action="{{ path('bingo_delete', {slug: bingo.slug}) }}"
+          data-controller="confirm"
+          data-confirm-message-value="Mettre le bingo « {{ bingo.title|e('js') }} » à la corbeille ?"
+          data-action="submit->confirm#submit"
+          class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete_bingo_' ~ bingo.slug) }}">
+        <button type="submit"
+                aria-label="Supprimer ce bingo"
+                title="Supprimer ce bingo"
+                class="w-8 h-8 rounded-full bg-paper/90 border border-line-soft text-ink-soft hover:text-rose-600 hover:bg-rose-50 hover:border-rose-200 transition-colors flex items-center justify-center shadow-[0_2px_6px_-2px_rgba(42,38,64,.12)] cursor-pointer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                <path d="M10 11v6"/>
+                <path d="M14 11v6"/>
+                <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+            </svg>
+        </button>
+    </form>
+</article>

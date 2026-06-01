@@ -17,6 +17,9 @@ class BingoItemController extends AbstractController
     public function check(BingoItem $item, EntityManagerInterface $em, BingoChecker $bingoService): Response
     {
         $bingo = $item->getBingo();
+        if ($bingo === null || $bingo->isTrashed()) {
+            throw $this->createNotFoundException('Bingo not found');
+        }
         $wasDone = $item->getCompletedAt() !== null;
 
         if ($wasDone) {
@@ -52,6 +55,10 @@ class BingoItemController extends AbstractController
         EntityManagerInterface $em,
         BingoChecker $checker,
     ): Response {
+        $bingo = $item->getBingo();
+        if ($bingo === null || $bingo->isTrashed()) {
+            throw $this->createNotFoundException('Bingo not found');
+        }
         $form = $this->createForm(BingoItemType::class, $item, [
             'completed_default' => $item->getCompletedAt() !== null,
         ]);
@@ -67,7 +74,6 @@ class BingoItemController extends AbstractController
 
             $em->flush();
 
-            $bingo = $item->getBingo();
             $linePositions = $checker->getLinePositions($bingo);
             $completed = 0;
             foreach ($bingo->getBingoItems() as $i) {

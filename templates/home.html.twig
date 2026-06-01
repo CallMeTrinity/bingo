@@ -10,14 +10,40 @@
         {% endblock %}
 
         {% block header_right %}
-            <div class="text-right">
-                <div class="text-[11px] font-semibold tracking-widest uppercase text-ink-soft">Total</div>
-                <div class="font-serif text-[22px]">{{ entries|length }}</div>
+            <div class="flex items-center gap-4">
+                <a href="{{ path('bingo_trash') }}"
+                   class="relative inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-line-soft bg-paper text-ink-soft hover:text-ink hover:bg-cream transition-colors"
+                   title="Voir la corbeille">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                        <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                    </svg>
+                    <span class="text-[13px] font-semibold">Corbeille</span>
+                    {% if trashCount > 0 %}
+                        <span class="ml-1 min-w-5 h-5 px-1.5 rounded-full bg-peach text-ink text-[11px] font-semibold inline-flex items-center justify-center shadow-[0_1px_0_rgba(255,255,255,.6)_inset]">
+                            {{ trashCount }}
+                        </span>
+                    {% endif %}
+                </a>
+                <div class="text-right">
+                    <div class="text-[11px] font-semibold tracking-widest uppercase text-ink-soft">Total</div>
+                    <div class="font-serif text-[22px]">{{ entries|length }}</div>
+                </div>
             </div>
         {% endblock %}
     {% endembed %}
 
     <main class="max-w-300 mx-auto px-7 pt-10 pb-20">
+        {% for label, messages in app.flashes(['success', 'error']) %}
+            {% for message in messages %}
+                <div class="mb-4 px-4 py-3 rounded-xl border text-[14px] shadow-[0_2px_6px_-2px_rgba(42,38,64,.05)]
+                            {{ label == 'success' ? 'bg-mint/40 border-mint text-ink' : 'bg-rose-100 border-rose-200 text-rose-700' }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
         <section class="mb-8">
             <p class="font-hand text-[22px] text-ink-soft -rotate-1">
                 <span class="text-lavender">※</span>

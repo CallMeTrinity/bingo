@@ -1,0 +1,118 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Corbeille{% endblock %}
+
+{% set toneClasses = ['bg-lavender', 'bg-peach', 'bg-mint', 'bg-sky', 'bg-butter'] %}
+
+{% block body %}
+    {% embed 'components/header.html.twig' %}
+        {% block header_main %}
+            <div class="text-[11px] font-semibold tracking-widest uppercase text-ink-soft">Carnet</div>
+            <h1 class="font-serif text-[26px] leading-tight mt-0.5">Corbeille</h1>
+        {% endblock %}
+
+        {% block header_right %}
+            <a href="{{ path('app_home') }}"
+               class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-line-soft bg-paper text-ink-soft hover:text-ink hover:bg-cream transition-colors">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                    <polyline points="15 18 9 12 15 6"/>
+                </svg>
+                <span class="text-[13px] font-semibold">Retour</span>
+            </a>
+        {% endblock %}
+    {% endembed %}
+
+    <main class="max-w-300 mx-auto px-7 pt-10 pb-20">
+        {% for label, messages in app.flashes(['success', 'error']) %}
+            {% for message in messages %}
+                <div class="mb-4 px-4 py-3 rounded-xl border text-[14px] shadow-[0_2px_6px_-2px_rgba(42,38,64,.05)]
+                            {{ label == 'success' ? 'bg-mint/40 border-mint text-ink' : 'bg-rose-100 border-rose-200 text-rose-700' }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <section class="mb-8">
+            <p class="font-hand text-[22px] text-ink-soft -rotate-1">
+                <span class="text-lavender">※</span>
+                Les bingos écartés. Restaure ou efface pour de bon.
+            </p>
+        </section>
+
+        {% if entries|length == 0 %}
+            <div class="p-10 rounded-card-lg border-2 border-dashed border-line text-center">
+                <p class="font-serif text-[22px] text-ink mb-1.5">Rien dans la corbeille</p>
+                <p class="font-hand text-[16px] text-ink-soft">
+                    <span class="text-lavender">✦</span> Tout est en place.
+                </p>
+            </div>
+        {% else %}
+            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for entry in entries %}
+                    {% set bingo = entry.bingo %}
+                    {% set total = entry.total %}
+                    {% set completed = entry.completed %}
+                    {% set completedSet = entry.completedPositions %}
+
+                    <article class="relative flex flex-col gap-4 p-5 rounded-card-lg bg-paper/70 border border-line-soft shadow-card opacity-80">
+                        <div class="flex items-start justify-between gap-3">
+                            <div class="flex flex-col gap-1.5 min-w-0">
+                                <span class="inline-flex items-center self-start px-2.5 py-0.5 rounded-full bg-line text-[11px] font-semibold tracking-wide text-ink-soft">
+                                    {{ bingo.year }}
+                                </span>
+                                <h2 class="font-serif text-[22px] leading-tight truncate">{{ bingo.title }}</h2>
+                                <p class="text-[12px] text-ink-soft">
+                                    Supprimé le <time datetime="{{ bingo.deletedAt|date('c') }}">{{ bingo.deletedAt|date('d/m/Y') }}</time>
+                                    · {{ total }} cases
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="grid gap-1.5 p-2 rounded-2xl bg-cream/50 border border-line-soft grayscale-[0.4]"
+                             style="grid-template-columns: repeat({{ bingo.size }}, minmax(0, 1fr));">
+                            {% for item in bingo.bingoItems %}
+                                {% set toneClass = toneClasses[(item.position - 1) % 5] %}
+                                {% set isDone = item.position in completedSet %}
+                                <div class="aspect-square rounded-md border border-line-soft {{ isDone ? toneClass : 'bg-paper/60' }}"
+                                     aria-hidden="true"></div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="flex items-center justify-between gap-2 pt-1">
+                            <form method="post"
+                                  action="{{ path('bingo_restore', {slug: bingo.slug}) }}"
+                                  class="flex-1">
+                                <input type="hidden" name="_token" value="{{ csrf_token('restore_bingo_' ~ bingo.slug) }}">
+                                <button type="submit"
+                                        class="w-full inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-mint/60 border border-line-soft text-ink font-semibold hover:bg-mint transition-colors cursor-pointer">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                                        <polyline points="1 4 1 10 7 10"/>
+                                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                                    </svg>
+                                    Restaurer
+                                </button>
+                            </form>
+
+                            <form method="post"
+                                  action="{{ path('bingo_destroy', {slug: bingo.slug}) }}"
+                                  data-controller="confirm"
+                                  data-confirm-message-value="Supprimer définitivement « {{ bingo.title|e('js') }} » et ses {{ total }} cases ? Cette action est irréversible."
+                                  data-action="submit->confirm#submit"
+                                  class="flex-1">
+                                <input type="hidden" name="_token" value="{{ csrf_token('destroy_bingo_' ~ bingo.slug) }}">
+                                <button type="submit"
+                                        class="w-full inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-paper border border-line-soft text-ink-soft hover:text-rose-700 hover:bg-rose-50 hover:border-rose-200 transition-colors cursor-pointer">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                                        <polyline points="3 6 5 6 21 6"/>
+                                        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                                    </svg>
+                                    Effacer
+                                </button>
+                            </form>
+                        </div>
+                    </article>
+                {% endfor %}
+            </section>
+        {% endif %}
+    </main>
+{% endblock %}

@@ -39,6 +39,9 @@ class Bingo
     #[ORM\Column(options: ['default' => 4])]
     private ?int $size = 4;
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $deletedAt = null;
+
     public function __construct()
     {
         $this->bingoItems = new ArrayCollection();
@@ -133,5 +136,22 @@ class Bingo
         $this->size = $size;
 
         return $this;
+    }
+
+    public function getDeletedAt(): ?\DateTimeImmutable
+    {
+        return $this->deletedAt;
+    }
+
+    public function setDeletedAt(?\DateTimeImmutable $deletedAt): static
+    {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    public function isTrashed(): bool
+    {
+        return $this->deletedAt !== null;
     }
 }

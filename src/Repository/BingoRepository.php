@@ -16,28 +16,48 @@ class BingoRepository extends ServiceEntityRepository
         parent::__construct($registry, Bingo::class);
     }
 
-    //    /**
-    //     * @return Bingo[] Returns an array of Bingo objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('b')
-    //            ->andWhere('b.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('b.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /** @return Bingo[] */
+    public function findActive(): array
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.deletedAt IS NULL')
+            ->orderBy('b.year', 'DESC')
+            ->addOrderBy('b.id', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 
-    //    public function findOneBySomeField($value): ?Bingo
-    //    {
-    //        return $this->createQueryBuilder('b')
-    //            ->andWhere('b.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /** @return Bingo[] */
+    public function findTrashed(): array
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.deletedAt IS NOT NULL')
+            ->orderBy('b.deletedAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findOneActiveBySlug(string $slug): ?Bingo
+    {
+        return $this->findOneBy(['slug' => $slug, 'deletedAt' => null]);
+    }
+
+    public function findOneTrashedBySlug(string $slug): ?Bingo
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.slug = :slug')
+            ->andWhere('b.deletedAt IS NOT NULL')
+            ->setParameter('slug', $slug)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function countTrashed(): int
+    {
+        return (int) $this->createQueryBuilder('b')
+            ->select('COUNT(b.id)')
+            ->andWhere('b.deletedAt IS NOT NULL')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }
