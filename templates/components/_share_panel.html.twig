@@ -1,5 +1,6 @@
 {% set shareUrl = url('bingo_share', {slug: bingo.slug}) %}
 {% set title = bingo.title %}
+{% set slug = bingo.slug %}
 <dialog data-modal-target="dialog"
         data-action="click->modal#backdropClose"
         class="rounded-card-lg bg-paper border border-line-soft shadow-pop p-0 backdrop:bg-ink/40 backdrop:backdrop-blur-sm m-auto w-[min(92vw,460px)] open:animate-pop-in">
@@ -35,8 +36,12 @@
               </span>
         </div>
 
-        <button disabled class="btn btn--secondary w-full mt-6">
-            Télécharger en image (bientôt)
+        <button type="button"
+                data-controller="bingo-export"
+                data-action="click->bingo-export#download"
+                data-bingo-export-filename-value="bingo-{{ slug }}.png"
+                class="btn btn--secondary w-full mt-6">
+            Télécharger en image
         </button>
     </div>
 </dialog>
