@@ -1,0 +1,66 @@
+{#
+    Fragment des champs du form d'inscription.
+    Rendu tel quel à l'init, OU renvoyé seul en réponse XHR
+    quand le form a des erreurs de validation (form_controller#submit swap le innerHTML).
+#}
+
+{# Helper macro pour rendre les champs texte/email/password avec gestion d'erreur uniforme #}
+{% macro field(formField, label) %}
+    {% set hasError = formField.vars.errors|length > 0 %}
+    {% set baseClass = 'px-3.5 py-2.5 rounded-xl bg-cream/60 border focus:outline-none focus:bg-paper text-ink placeholder:text-ink-faint transition-colors' %}
+    {% set borderClass = hasError ? 'border-rose-300 bg-rose-50/40 focus:border-rose-500' : 'border-line-soft focus:border-lavender' %}
+    <div class="flex flex-col gap-1.5">
+        <label for="{{ formField.vars.id }}" class="text-[11px] font-semibold tracking-widest uppercase text-ink-soft">
+            {{ label }}
+        </label>
+        {{ form_widget(formField, { attr: { class: baseClass ~ ' ' ~ borderClass } }) }}
+        {% if hasError %}
+            <p class="flex items-start gap-1.5 text-[12px] text-rose-700 font-medium">
+                <span aria-hidden="true" class="inline-flex w-4 h-4 rounded-full bg-rose-200 text-rose-800 items-center justify-center text-[10px] font-bold flex-shrink-0">!</span>
+                <span>{{ formField.vars.errors[0].message }}</span>
+            </p>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% import _self as f %}
+
+{# Erreurs globales (CSRF, etc.) #}
+{% if registrationForm.vars.errors|length > 0 %}
+    <div class="px-4 py-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-[14px] mb-1">
+        {{ form_errors(registrationForm) }}
+    </div>
+{% endif %}
+
+{{ f.field(registrationForm.displayName, 'Nom affiché') }}
+{{ f.field(registrationForm.email, 'Email') }}
+{{ f.field(registrationForm.plainPassword, 'Mot de passe') }}
+
+{# Checkbox terms : rendu spécifique avec target Stimulus pour gating du submit #}
+{% set termsError = registrationForm.agreeTerms.vars.errors|length > 0 %}
+<div class="flex flex-col gap-1.5">
+    <label for="{{ registrationForm.agreeTerms.vars.id }}"
+           class="flex items-start gap-2.5 px-3.5 py-2.5 rounded-xl border bg-cream/60 cursor-pointer transition-colors {{ termsError ? 'border-rose-300 bg-rose-50/40' : 'border-line-soft hover:border-lavender' }}">
+        {{ form_widget(registrationForm.agreeTerms, {
+            attr: {
+                class: 'mt-0.5 w-4 h-4 accent-lavender cursor-pointer',
+                'data-form-target': 'terms',
+                'data-action': 'change->form#toggleSubmit',
+            }
+        }) }}
+        <span class="text-[14px] text-ink select-none">J'accepte les conditions d'utilisation</span>
+    </label>
+    {% if termsError %}
+        <p class="flex items-start gap-1.5 text-[12px] text-rose-700 font-medium">
+            <span aria-hidden="true" class="inline-flex w-4 h-4 rounded-full bg-rose-200 text-rose-800 items-center justify-center text-[10px] font-bold flex-shrink-0">!</span>
+            <span>{{ registrationForm.agreeTerms.vars.errors[0].message }}</span>
+        </p>
+    {% endif %}
+</div>
+
+<button type="submit"
+        data-form-target="submit"
+        disabled
+        class="btn btn--primary mt-2">
+    Créer mon compte
+</button>

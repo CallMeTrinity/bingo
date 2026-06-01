@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un compte{% endblock %}
+
+{% set labelClass = 'text-[11px] font-semibold tracking-widest uppercase text-ink-soft' %}
+
+{% block body %}
+    <main class="min-h-screen flex items-center justify-center px-5 py-10">
+        <div class="w-full max-w-md">
+            <a href="{{ path('app_home') }}" aria-label="Accueil"
+               class="inline-flex w-12 h-12 mb-6 rounded-2xl bg-lavender items-center justify-center font-serif text-[26px] text-ink shadow-[0_2px_6px_-2px_rgba(42,38,64,.18),0_1px_0_rgba(255,255,255,.5)_inset] hover:-rotate-6 transition-transform">
+                B
+            </a>
+
+            <div class="bg-paper border border-line-soft rounded-card-lg shadow-card p-7">
+                <div class="mb-6">
+                    <div class="{{ labelClass }}">Inscription</div>
+                    <h1 class="font-serif text-[28px] leading-tight mt-0.5">Un nouveau carnet</h1>
+                    <p class="font-hand text-[18px] text-ink-soft mt-1.5 -rotate-1">
+                        <span class="text-lavender">✦</span> Une grille par année, à toi de remplir.
+                    </p>
+                </div>
+
+                {{ form_start(registrationForm, {
+                    attr: {
+                        class: 'flex flex-col gap-4',
+                        novalidate: 'novalidate',
+                        'data-controller': 'form',
+                        'data-action': 'submit->form#submit',
+                    }
+                }) }}
+                    <div data-form-target="fields">
+                        {{ include('registration/_form_fields.html.twig', { registrationForm: registrationForm }, with_context = false) }}
+                    </div>
+                {{ form_end(registrationForm) }}
+
+                <p class="text-center text-[13px] text-ink-soft mt-5">
+                    Déjà un compte ?
+                    <a href="{{ path('app_login') }}" class="text-lavender hover:underline">Connexion</a>
+                </p>
+            </div>
+        </div>
+    </main>
+{% endblock %}

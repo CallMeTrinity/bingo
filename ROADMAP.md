@@ -11,101 +11,15 @@
 
 ## ✅ Phase 1 — Foundation
 
-Entités `Bingo` (`year`, `title`, `slug`, items) et `BingoItem` (`label`, `position`, `completedAt`, `note`), migration, fixtures, route `/bingo/{year}` qui rend la grille 4×4.
-
-Fait : `src/Entity/{Bingo,BingoItem}.php`, `src/DataFixtures/BingoFixtures.php`, `src/Controller/BingoController.php`, `migrations/Version*`, `templates/bingo/index.html.twig`.
-
----
-
 ## ✅ Phase 2 — Interactivité
-
-Toggle d'une case sans rechargement via Stimulus + `fetch` JSON (pas Turbo). Détection serveur des lignes/colonnes complètes.
-
-- `POST /bingo/{id}/check` → JSON `{ active, linePositions, completedLines, completed, total }`
-- `BingoChecker` : `getCompletedLines`, `getCompletedColumns`, `getLinePositions`, `hasBingo`
-- `bingo_cell_controller.js` : POST + toggle classe `done` + dispatch `bingo-cell:updated`
-- `bingo_board_controller.js` : sync halo `in-line`, stat chips, anneau de progression
-
----
-
+           
 ## ✅ Phase 3 — Design pastel
-
-Port du design exporté depuis claude.ai/design (carnet de bonnes résolutions, pastels lavande/pêche/menthe).
-
-- **Top bar** sticky : logo « B », titre serif, fraction `x/y` et anneau SVG de progression
-- **Stat chips** : cases faites, lignes complètes, reste à faire, année
-- **Cellules sticker** : background pastel cyclé via `data-tone` (5 tons), rotation `-0.6deg` quand cochée, note manuscrite (`Caveat`) qui apparaît, badge check animé en `pop-in`
-- **Halo `line-glow`** persistant sur les cellules d'une ligne/colonne complète
-- **Confettis** au moment où une case bascule en `done` (22 particules pastel à la position du clic)
-
-Fichiers : `assets/styles/components/bingo.css`, `assets/controllers/bingo_{cell,board}_controller.js`, `templates/{base,bingo/index}.html.twig`.
-
----
 
 ## ✅ Phase 4 — Multi-bingo (accueil + création)
 
-**Objectif** : page d'accueil qui liste tous les bingos, bouton « Nouveau bingo ».
-
-Template `templates/home.html.twig` : grille de cartes avec, pour chaque bingo :
-- mini-preview de la grille (les cases done colorées via `cellTone(position)`)
-- chip année, titre, sous-titre, taille
-- barre de progression dégradée + `x/16 faits · y%`
-Carte « + Nouveau bingo » en dashed border à la fin.
-Form Symfony `BingoType` : `title`, `year`, taille (3/4/5 ; voir 4.3 pour le support multi-taille). Génération du `slug` en `PrePersist` (déjà documenté dans l'entité).
-Aujourd'hui `BingoChecker::LINES` et `COLUMNS` sont en dur pour du 4×4. Pour supporter 3/4/5 :
-- Ajouter `Bingo::$size` (int, default 4), migration
-- Calculer `LINES`/`COLUMNS` dynamiquement à partir de `$bingo->getSize()`
-- Adapter `bingo-grid` CSS via `style="grid-template-columns: repeat({{ bingo.size }}, 1fr)"`
-
----
-
 ## ✅ Phase 5 — Édition d'une case
 
-Nouveau `cell_edit_modal_controller` qui :
-- ouvre la modale au clic sur un bouton crayon visible au hover de la cellule
-- contient les champs `label` (input), `note` (textarea, police Caveat), checkbox « fait »
-- POST en `fetch`, remplace le HTML de la cellule par la réponse, ferme la modale
-Aujourd'hui `completedAt` est stocké mais pas affiché. Dans la cellule ou la modale :
-
-## 🚧 Phase 6 — Partage
-
-**Objectif** : URL publique en lecture seule + export image personnalisable.
-
-### 6.1 Route `/b/{slug}`
-
-```php
-#[Route('/b/{slug}', name: 'bingo_share')]
-```
-
-Template `templates/bingo/share.html.twig` : même look que `index.html.twig` mais sans `data-controller="bingo-cell"` (lecture seule). Bandeau « Bingo de … — {{ year }} ».
-
-### 6.2 Bouton de partage
-
-Dans la top bar : bouton « Partager » → ouvre un panneau qui propose (a) copie de l'URL, (b) export image. Le partage URL passe par `clipboard_controller` Stimulus, feedback tooltip « Copié ! ».
-
-### 6.3 Export image
-
-**Objectif** : générer une image téléchargeable du bingo, avec options pour ajuster l'apparence avant export.
-
-**Options** présentées dans le panneau de partage (avant clic sur « Télécharger ») :
-- **Palette** : sélecteur parmi les 4 palettes pastel (Lavande, Ciel, Sorbet, Matcha) — réutilise le système CSS variables de la Phase 7.5
-- **Cases cochées** : `Afficher · Masquer · Style "carnet" (line-through)` — permet d'exporter un bingo vierge à imprimer ou un bingo rempli pour partager une progression
-- **Notes** : `Afficher · Masquer` — pour ne pas exposer ses notes perso
-- **En-tête** : `Année + titre · Titre seul · Vide`
-- **Format** : `Carré 1080×1080 (Insta) · Story 1080×1920 · A4 portrait (impression)`
-
-**Implémentation** : génération côté client via [`html2canvas`](https://html2canvas.hertzen.com/) (ou `dom-to-image`). Un `bingo_export_controller` Stimulus :
-1. Clone le `.bingo-card` dans un container offscreen avec les options appliquées
-2. Capture en canvas, déclenche le download du PNG
-3. Pas d'aller-retour serveur, tout reste local
-
-Si on a besoin d'un export plus fidèle ou serveur-side plus tard : route `/b/{slug}/export.png` rendant un template dédié avec [browsershot](https://github.com/spatie/browsershot) (Chromium headless).
-
-### 6.4 Meta Open Graph
-
-Image OG dynamique en réutilisant la même logique d'export : route `/og/{slug}.png` qui génère un visuel 1200×630 server-side (browsershot ou rendu via le template share). À skipper au début — un `<meta og:title>` text-only suffit avant.
-
----
+## ✅ Phase 6 — Partage
 
 ## 🚧 Phase 7 — Multi-utilisateur
 
