@@ -21,42 +21,7 @@
 
 ## ✅ Phase 6 — Partage
 
-## 🚧 Phase 7 — Multi-utilisateur
-
-**Objectif** : chaque personne a son compte et ses bingos.
-
-### 7.1 Entité User + Security
-
-```bash
-php bin/console make:user
-php bin/console make:auth
-```
-
-`User` : `id`, `email` (unique), `displayName`, `password` (hashé), `createdAt`. Provider Doctrine, authenticator form_login. Routes `/login`, `/register`, `/logout`.
-
-### 7.2 Ownership des bingos
-
-Migration : ajouter `Bingo::$owner` (ManyToOne User), nullable au début pour migrer les fixtures, puis NOT NULL une fois en place. `BingoRepository::findByOwner(User $u)`.
-
-Toutes les routes `bingo_*` (sauf `bingo_share` qui reste publique via slug) filtrent par `getUser()`. Voter Symfony `BingoVoter` pour `VIEW`/`EDIT` : owner-only sur edit, public-via-slug sur view.
-
-### 7.3 Page d'accueil par utilisateur
-
-Phase 4 sera implémentée pensée single-user ; à cette étape on la refactore pour ne retourner que les bingos de l'utilisateur connecté. Page `/login` séparée pour les invités, redirige vers `/` une fois loggué.
-
-### 7.4 Partage avec privacy par défaut
-
-Les bingos sont **privés** par défaut. Ajouter `Bingo::$isPublic` (bool, default false). Le slug ne fonctionne que si `isPublic === true`. Toggle dans les paramètres du bingo.
-
-### 7.5 Affichage du propriétaire sur la page share
-
-`templates/bingo/share.html.twig` : « Bingo de {{ bingo.owner.displayName }} — {{ year }} » dans le bandeau.
-
-### 7.6 Migration des données existantes
-
-Au moment de mettre `Bingo::$owner` NOT NULL : script qui crée un user `admin` et attribue tous les bingos orphelins. À documenter dans le `README` / un `make:migration` data-only.
-
----
+## ✅ Phase 7 — Multi-utilisateur
 
 ## 🚧 Phase 8 — Polish
 

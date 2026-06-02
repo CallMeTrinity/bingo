@@ -55,6 +55,13 @@
                 </div>
             </div>
 
+            <div class="flex flex-col gap-1.5">
+                {{ form_label(form.items, null, { label_attr: { class: 'text-[11px] font-semibold tracking-widest uppercase text-ink-soft' } }) }}
+                {{ form_widget(form.items, { attr: { class: 'px-3.5 py-2.5 rounded-xl bg-cream/60 border border-line-soft focus:outline-none focus:border-lavender focus:bg-paper text-ink placeholder:text-ink-faint transition-colors font-sans text-[13px] leading-relaxed resize-y' } }) }}
+                {{ form_help(form.items, { help_attr: { class: 'text-[12px] text-ink-soft' } }) }}
+                {{ form_errors(form.items, { attr: { class: 'text-[12px] text-rose-600' } }) }}
+            </div>
+
             {{ form_errors(form) }}
 
             <div class="flex items-center justify-end gap-2.5 mt-2">

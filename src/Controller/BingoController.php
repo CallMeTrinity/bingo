@@ -10,6 +10,7 @@ use App\Security\Voter\BingoVoter;
 use App\Service\BingoChecker;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -25,18 +26,37 @@ final class BingoController extends AbstractController
         $user = $this->getUser();
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $bingo->setOwner($user);
             $cellCount = $bingo->getSize() ** 2;
-            for ($position = 1; $position <= $cellCount; $position++) {
-                $item = new BingoItem();
-                $item->setLabel('');
-                $item->setPosition($position);
-                $bingo->addBingoItem($item);
-            }
-            $em->persist($bingo);
-            $em->flush();
+            $labels = $this->parseItems((string) $form->get('items')->getData());
 
-            return $this->redirectToRoute('bingo_show', ['slug' => $bingo->getSlug()]);
+            if (count($labels) > $cellCount) {
+                $form->get('items')->addError(new FormError(
+                    sprintf('Tu as saisi %d cases pour une grille de %d.', count($labels), $cellCount)
+                ));
+            }
+            foreach ($labels as $label) {
+                if (mb_strlen($label) > 255) {
+                    $form->get('items')->addError(new FormError(
+                        sprintf('Une case dépasse 255 caractères : « %s… »', mb_substr($label, 0, 30))
+                    ));
+                    break;
+                }
+            }
+
+            if ($form->isValid()) {
+                shuffle($labels);
+                $bingo->setOwner($user);
+                for ($position = 1; $position <= $cellCount; $position++) {
+                    $item = new BingoItem();
+                    $item->setLabel($labels[$position - 1] ?? '');
+                    $item->setPosition($position);
+                    $bingo->addBingoItem($item);
+                }
+                $em->persist($bingo);
+                $em->flush();
+
+                return $this->redirectToRoute('bingo_show', ['slug' => $bingo->getSlug()]);
+            }
         }
 
         $entries = array_map(
@@ -192,6 +212,17 @@ final class BingoController extends AbstractController
             'completedLinesCount' => count($checker->getCompletedLines($bingo)) + count($checker->getCompletedColumns($bingo)),
             'hasBingo' => $checker->hasBingo($bingo),
         ];
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function parseItems(string $raw): array
+    {
+        $lines = preg_split('/\r\n|\r|\n/', $raw) ?: [];
+        $trimmed = array_map('trim', $lines);
+
+        return array_values(array_filter($trimmed, fn(string $line) => $line !== ''));
     }
 
     #[Route('/bingo/{slug}/visibility', name: 'bingo_visibility', methods: ['POST'])]
