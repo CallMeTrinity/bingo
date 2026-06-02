@@ -9,7 +9,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\Length;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class BingoItemType extends AbstractType
 {
@@ -37,6 +39,21 @@ class BingoItemType extends AbstractType
                 'required' => false,
                 'attr' => ['placeholder' => '😀'],
                 'constraints' => [new Length(max: 16)],
+            ])
+            ->add('imageFile', VichImageType::class, [
+                'label' => 'Photo-preuve',
+                'required' => false,
+                'allow_delete' => true,
+                'download_uri' => false,
+                'image_uri' => true,
+                'asset_helper' => true,
+                'constraints' => [
+                    new Image(
+                        maxSize: '8M',
+                        mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
+                        mimeTypesMessage: 'Formats acceptés : JPG, PNG, WebP, GIF.',
+                    ),
+                ],
             ])
         ;
     }

@@ -52,14 +52,103 @@ body > * {
     transform: rotate(-.6deg) translateY(-2px);
 }
 
-.bingo-cell[data-tone="0"].done { background: var(--color-lavender); box-shadow: 0 1px 0 rgba(255, 255, 255, .7) inset, 0 6px 16px -8px var(--color-lavender); }
-.bingo-cell[data-tone="1"].done { background: var(--color-peach);    box-shadow: 0 1px 0 rgba(255, 255, 255, .7) inset, 0 6px 16px -8px var(--color-peach); }
-.bingo-cell[data-tone="2"].done { background: var(--color-mint);     box-shadow: 0 1px 0 rgba(255, 255, 255, .7) inset, 0 6px 16px -8px var(--color-mint); }
-.bingo-cell[data-tone="3"].done { background: var(--color-sky);      box-shadow: 0 1px 0 rgba(255, 255, 255, .7) inset, 0 6px 16px -8px var(--color-sky); }
-.bingo-cell[data-tone="4"].done { background: var(--color-butter);   box-shadow: 0 1px 0 rgba(255, 255, 255, .7) inset, 0 6px 16px -8px var(--color-butter); }
+.bingo-cell[data-tone="0"].done { background-color: var(--color-lavender); box-shadow: 0 1px 0 rgba(255, 255, 255, .7) inset, 0 6px 16px -8px var(--color-lavender); }
+.bingo-cell[data-tone="1"].done { background-color: var(--color-peach);    box-shadow: 0 1px 0 rgba(255, 255, 255, .7) inset, 0 6px 16px -8px var(--color-peach); }
+.bingo-cell[data-tone="2"].done { background-color: var(--color-mint);     box-shadow: 0 1px 0 rgba(255, 255, 255, .7) inset, 0 6px 16px -8px var(--color-mint); }
+.bingo-cell[data-tone="3"].done { background-color: var(--color-sky);      box-shadow: 0 1px 0 rgba(255, 255, 255, .7) inset, 0 6px 16px -8px var(--color-sky); }
+.bingo-cell[data-tone="4"].done { background-color: var(--color-butter);   box-shadow: 0 1px 0 rgba(255, 255, 255, .7) inset, 0 6px 16px -8px var(--color-butter); }
 
 .bingo-cell.in-line {
     animation: var(--animate-line-glow);
+}
+
+/* ─── Photo-preuve ─────────────────────────────────────────────
+   The background-image is set inline by the template via a `style` attribute.
+   We add a gradient overlay via ::before to keep the title/note readable. */
+
+.bingo-cell.has-image {
+    background-size: cover;
+    background-position: center;
+}
+
+.bingo-cell.has-image::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(20, 18, 35, .72) 0%, rgba(20, 18, 35, .35) 45%, rgba(20, 18, 35, .15) 100%);
+    pointer-events: none;
+}
+
+.bingo-cell.has-image > div {
+    position: relative;
+}
+
+.bingo-cell.has-image .cell-title,
+.bingo-cell.has-image .cell-note {
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, .45);
+}
+
+.bingo-cell.has-image.done .cell-title {
+    text-decoration-color: rgba(255, 255, 255, .75);
+}
+
+.bingo-cell.has-image .cell-check {
+    border-color: rgba(255, 255, 255, .85);
+    background: rgba(255, 255, 255, .15);
+    backdrop-filter: blur(2px);
+}
+
+.bingo-cell.has-image.done {
+    background-color: transparent;
+}
+
+.bingo-cell.has-image.done::before {
+    background: linear-gradient(to top, rgba(20, 18, 35, .55) 0%, rgba(20, 18, 35, .2) 45%, rgba(20, 18, 35, .05) 100%);
+}
+
+/* Pastel tone filter — applied via ::after on validated cells with an image.
+   Honours the per-tone palette, toggleable via [data-photo-filter] on <html>. */
+
+.bingo-cell.has-image.done::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: .38;
+    transition: opacity .25s;
+}
+
+.bingo-cell.has-image.done[data-tone="0"]::after { background-color: var(--color-lavender); }
+.bingo-cell.has-image.done[data-tone="1"]::after { background-color: var(--color-peach); }
+.bingo-cell.has-image.done[data-tone="2"]::after { background-color: var(--color-mint); }
+.bingo-cell.has-image.done[data-tone="3"]::after { background-color: var(--color-sky); }
+.bingo-cell.has-image.done[data-tone="4"]::after { background-color: var(--color-butter); }
+
+[data-photo-filter="off"] .bingo-cell.has-image.done::after {
+    opacity: 0;
+}
+
+/* ─── Image preview in the edit modal ──────────────── */
+
+.cell-image-preview:has(input:checked) img {
+    opacity: .35;
+    filter: grayscale(.6);
+}
+
+.cell-image-delete {
+    @apply absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full
+           bg-paper border border-line-soft text-rose-500
+           flex items-center justify-center text-[11px] leading-none
+           cursor-pointer transition-colors shadow-sm;
+}
+
+.cell-image-delete:hover {
+    @apply bg-rose-50 text-rose-600;
+}
+
+.cell-image-preview:has(input:checked) .cell-image-delete {
+    @apply bg-rose-500 text-white border-rose-500;
 }
 
 .bingo-cell.done .cell-check {

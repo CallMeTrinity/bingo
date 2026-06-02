@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <div>
+        <div class="mb-4">
             <div class="text-[11px] font-semibold tracking-widest uppercase text-ink-soft mb-2.5">Densité</div>
             <div class="flex gap-2">
                 {% for d, label in {'compact': 'Compact', 'regular': 'Régulier', 'comfy': 'Confort'} %}
@@ -36,6 +36,24 @@
                         {{ label }}
                     </button>
                 {% endfor %}
+            </div>
+        </div>
+
+        {% set photoFilterOn = app.user.photoFilter %}
+        <div>
+            <div class="flex items-center justify-between gap-3">
+                <div>
+                    <div class="text-[11px] font-semibold tracking-widest uppercase text-ink-soft">Filtre photo</div>
+                    <div class="text-[12px] text-ink-soft mt-0.5">Teinte pastel sur les cases cochées avec photo.</div>
+                </div>
+                <button type="button"
+                        role="switch"
+                        aria-checked="{{ photoFilterOn ? 'true' : 'false' }}"
+                        data-action="tweaks#togglePhotoFilter"
+                        data-tweaks-target="photoFilterSwitch"
+                        class="switch">
+                    <span class="switch__thumb"></span>
+                </button>
             </div>
         </div>
     </div>

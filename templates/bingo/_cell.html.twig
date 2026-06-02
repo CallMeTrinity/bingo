@@ -5,6 +5,7 @@ Params:
   linePositions: int[] positions appartenant à une ligne/colonne complète
 #}
 {% set readOnly = readOnly ?? false %}
+{% set imageUrl = item.imageName ? vich_uploader_asset(item, 'imageFile') : null %}
 
 <article
     {% if not readOnly %}
@@ -16,7 +17,8 @@ Params:
     data-bingo-cell-active-value="{{ item.completedAt ? 'true' : 'false' }}"
     data-bingo-cell-position-value="{{ item.position }}"
     data-tone="{{ item.position % 5 }}"
-    class="bingo-cell group{{ item.completedAt ? ' done' : '' }}{{ item.position in linePositions ? ' in-line' : '' }} relative">
+    {% if imageUrl %}style="background-image: url('{{ imageUrl }}')"{% endif %}
+    class="bingo-cell group{{ item.completedAt ? ' done' : '' }}{{ item.position in linePositions ? ' in-line' : '' }}{{ imageUrl ? ' has-image' : '' }} relative">
     <div class="flex justify-between items-start">
         {% if item.emoji %}
             <div class="cell-emoji text-3xl leading-none">{{ item.emoji }}</div>

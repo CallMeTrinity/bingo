@@ -32,6 +32,10 @@ final class PreferencesController extends AbstractController
             $user->setDensity($density);
         }
 
+        if ($request->request->has('photoFilter')) {
+            $user->setPhotoFilter($request->request->getBoolean('photoFilter'));
+        }
+
         $entityManager->flush();
 
         return new Response(null, 204);

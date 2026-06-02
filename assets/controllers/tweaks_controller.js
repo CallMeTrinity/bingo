@@ -1,7 +1,7 @@
 import {Controller} from '@hotwired/stimulus';
 
 export default class extends Controller {
-    static targets = ['panel'];
+    static targets = ['panel', 'photoFilterSwitch'];
     static values = {
         url: String,
         csrfToken: String,
@@ -31,6 +31,15 @@ export default class extends Controller {
         document.documentElement.dataset.density = params.value;
         localStorage.setItem('bingo.density', params.value);
         this.sync({density: params.value});
+    }
+
+    togglePhotoFilter() {
+        const next = this.photoFilterSwitchTarget.getAttribute('aria-checked') !== 'true';
+        this.photoFilterSwitchTarget.setAttribute('aria-checked', String(next));
+        const value = next ? 'on' : 'off';
+        document.documentElement.dataset.photoFilter = value;
+        localStorage.setItem('bingo.photoFilter', value);
+        this.sync({photoFilter: next ? '1' : '0'});
     }
 
     sync(data){

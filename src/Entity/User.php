@@ -23,6 +23,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public const array DENSITIES = ['compact', 'regular', 'comfy'];
     public const string DEFAULT_PALETTE = 'lavande';
     public const string DEFAULT_DENSITY = 'regular';
+    public const bool DEFAULT_PHOTO_FILTER = true;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -235,6 +236,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             throw new InvalidArgumentException('Invalid density');
         }
         $this->preferences['density'] = $density;
+        return $this;
+    }
+
+    public function isPhotoFilter(): bool
+    {
+        return $this->preferences['photoFilter'] ?? self::DEFAULT_PHOTO_FILTER;
+    }
+
+    public function setPhotoFilter(bool $photoFilter): static
+    {
+        $this->preferences['photoFilter'] = $photoFilter;
         return $this;
     }
 }

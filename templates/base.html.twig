@@ -2,6 +2,7 @@
 <html lang="fr"
 data-palette="{{ app.user ? app.user.palette: '' }}"
 data-density="{{ app.user ? app.user.density: '' }}"
+data-photo-filter="{{ app.user ? (app.user.photoFilter ? 'on' : 'off') : '' }}"
 >
     <head>
         <meta charset="UTF-8">
@@ -15,6 +16,7 @@ data-density="{{ app.user ? app.user.density: '' }}"
                 const h = document.documentElement;
                 if (!h.dataset.palette) h.dataset.palette = localStorage.getItem('bingo.palette') || 'lavande';
                 if (!h.dataset.density) h.dataset.density = localStorage.getItem('bingo.density') || 'regular';
+                if (!h.dataset.photoFilter) h.dataset.photoFilter = localStorage.getItem('bingo.photoFilter') || 'on';
             })();
         </script>
         {% block stylesheets %}
