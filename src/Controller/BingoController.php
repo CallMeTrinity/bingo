@@ -133,37 +133,41 @@ final class BingoController extends AbstractController
     #[Route('/bingo/{slug}', name: 'bingo_show')]
     public function index(string $slug, BingoRepository $br, BingoChecker $checker): Response
     {
-        $bingoData = $this->loadBingoView($slug, $br);
-        $this->denyAccessUnlessGranted(BingoVoter::EDIT, $bingoData['bingo']);
+        $bingo = $br->findOneActiveBySlug($slug);
+        if (!$bingo) {
+            throw $this->createNotFoundException('Bingo not found');
+        }
+        $this->denyAccessUnlessGranted(BingoVoter::EDIT, $bingo);
 
         return $this->render('bingo/index.html.twig', [
-            ...$bingoData,
+            ...$this->buildBingoView($bingo),
             'readOnly' => false,
-            'completedLinesCount' => count($checker->getCompletedLines($bingoData['bingo'])) + count($checker->getCompletedColumns($bingoData['bingo'])),
-            'linePositions' => $checker->getLinePositions($bingoData['bingo']),
+            'completedLinesCount' => count($checker->getCompletedLines($bingo)) + count($checker->getCompletedColumns($bingo)),
+            'linePositions' => $checker->getLinePositions($bingo),
         ]);
     }
 
     #[Route('/b/{slug}', name: 'bingo_share')]
     public function share(string $slug, BingoRepository $br, BingoChecker $checker): Response
     {
-        $bingoData = $this->loadBingoView($slug, $br);
-
-        return $this->render('bingo/share.html.twig', [
-            ...$bingoData,
-            'readOnly' => true,
-            'completedLinesCount' => count($checker->getCompletedLines($bingoData['bingo'])) + count($checker->getCompletedColumns($bingoData['bingo'])),
-            'linePositions' => $checker->getLinePositions($bingoData['bingo']),
-        ]);
-    }
-
-    private function loadBingoView(string $slug, BingoRepository $br): array
-    {
         $bingo = $br->findOneActiveBySlug($slug);
-        if (!$bingo) {
+        if (!$bingo || !$bingo->isPublic()) {
             throw $this->createNotFoundException('Bingo not found');
         }
 
+        return $this->render('bingo/share.html.twig', [
+            ...$this->buildBingoView($bingo),
+            'readOnly' => true,
+            'completedLinesCount' => count($checker->getCompletedLines($bingo)) + count($checker->getCompletedColumns($bingo)),
+            'linePositions' => $checker->getLinePositions($bingo),
+        ]);
+    }
+
+    /**
+     * @return array{bingo: Bingo, completed: int, total: int}
+     */
+    private function buildBingoView(Bingo $bingo): array
+    {
         $items = $bingo->getBingoItems();
         $completed = 0;
         foreach ($items as $item) {
@@ -188,5 +192,27 @@ final class BingoController extends AbstractController
             'completedLinesCount' => count($checker->getCompletedLines($bingo)) + count($checker->getCompletedColumns($bingo)),
             'hasBingo' => $checker->hasBingo($bingo),
         ];
+    }
+
+    #[Route('/bingo/{slug}/visibility', name: 'bingo_visibility', methods: ['POST'])]
+    public function visibility(string $slug, Request $request, BingoRepository $br, EntityManagerInterface $em): Response
+    {
+        $bingo = $br->findOneActiveBySlug($slug);
+        if (!$bingo) {
+            throw $this->createNotFoundException('Bingo not found');
+        }
+        $this->denyAccessUnlessGranted(BingoVoter::EDIT, $bingo);
+
+        if (!$this->isCsrfTokenValid('visibility_bingo_'.$bingo->getSlug(), (string) $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException('Jeton CSRF invalide.');
+        }
+
+        $isPublic = filter_var($request->request->get('state'), FILTER_VALIDATE_BOOLEAN);
+        $bingo->setIsPublic($isPublic);
+        $em->flush();
+
+        return $this->json([
+            'isPublic' => $bingo->isPublic(),
+        ]);
     }
 }

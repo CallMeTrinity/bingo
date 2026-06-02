@@ -21,19 +21,47 @@
             </p>
         </header>
 
-        <div data-controller="clipboard" data-clipboard-text-value="{{ shareUrl }}">
-            <label class="block text-[13px] text-ink-soft mb-1.5">Lien public</label>
-            <div class="flex gap-2 mb-2">
-                <input type="text" readonly value="{{ shareUrl }}"
-                       class="flex-1 px-3 py-2 rounded-xl border border-line-soft bg-cream/50 text-ink text-[13px]" />
-                <button type="button" data-action="click->clipboard#copy" class="btn btn--primary">
-                    Copier
+        <div data-controller="visibility"
+             data-visibility-url-value="{{ path('bingo_visibility', {slug: slug}) }}"
+             data-visibility-csrf-token-value="{{ csrf_token('visibility_bingo_' ~ slug) }}"
+             data-visibility-is-public-value="{{ bingo.isPublic ? '1' : '0' }}">
+
+            <div class="flex items-start justify-between gap-4 mb-3">
+                <div class="min-w-0">
+                    <div class="text-[11px] font-semibold tracking-widest uppercase text-ink-soft">Lien public</div>
+                    <p class="text-[13px] text-ink-soft mt-0.5" data-visibility-target="hint">
+                        {{ bingo.isPublic
+                            ? 'Toute personne avec ce lien peut voir le bingo.'
+                            : 'Le lien est désactivé. Active-le pour partager.' }}
+                    </p>
+                </div>
+                <button type="button"
+                        role="switch"
+                        aria-label="Activer le lien public"
+                        aria-checked="{{ bingo.isPublic ? 'true' : 'false' }}"
+                        data-action="visibility#toggle"
+                        data-visibility-target="switch"
+                        class="switch">
+                    <span class="switch__thumb"></span>
                 </button>
             </div>
-            <span data-clipboard-target="feedback"
-                  class="text-[12px] text-ink-soft opacity-0 transition-opacity">
-                  ✓ Copié dans le presse-papiers
-              </span>
+
+            <div data-controller="clipboard"
+                 data-clipboard-text-value="{{ shareUrl }}"
+                 data-visibility-target="shareSection"
+                 class="transition-opacity {% if not bingo.isPublic %}opacity-50 pointer-events-none{% endif %}">
+                <div class="flex gap-2 mb-2">
+                    <input type="text" readonly value="{{ shareUrl }}"
+                           class="flex-1 px-3 py-2 rounded-xl border border-line-soft bg-cream/50 text-ink text-[13px]" />
+                    <button type="button" data-action="click->clipboard#copy" class="btn btn--primary">
+                        Copier
+                    </button>
+                </div>
+                <span data-clipboard-target="feedback"
+                      class="text-[12px] text-ink-soft opacity-0 transition-opacity">
+                      ✓ Copié dans le presse-papiers
+                </span>
+            </div>
         </div>
 
         <button type="button"

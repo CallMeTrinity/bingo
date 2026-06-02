@@ -45,6 +45,9 @@ class Bingo
     #[ORM\ManyToOne(inversedBy: 'bingos')]
     private ?User $owner = null;
 
+    #[ORM\Column(options: ['default' => false])]
+    private bool $isPublic = false;
+
     public function __construct()
     {
         $this->bingoItems = new ArrayCollection();
@@ -166,6 +169,18 @@ class Bingo
     public function setOwner(?User $owner): static
     {
         $this->owner = $owner;
+
+        return $this;
+    }
+
+    public function isPublic(): bool
+    {
+        return $this->isPublic;
+    }
+
+    public function setIsPublic(bool $isPublic): static
+    {
+        $this->isPublic = $isPublic;
 
         return $this;
     }
