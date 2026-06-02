@@ -1,5 +1,5 @@
 <header class="sticky top-0 z-50 flex items-center gap-4 px-7 py-5 border-b border-line-soft bg-cream/70 backdrop-blur-md">
-    <a href="{{ path('app_home') }}" aria-label="Accueil"
+    <a href="{{ path(app.user ? 'app_dashboard' : 'app_home') }}" aria-label="Accueil"
        class="w-9.5 h-9.5 rounded-xl bg-accent flex items-center justify-center font-serif text-[22px] text-ink shadow-[0_2px_6px_-2px_rgba(42,38,64,.18),0_1px_0_rgba(255,255,255,.5)_inset] hover:-rotate-6 transition-transform duration-200">
         B
     </a>

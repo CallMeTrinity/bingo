@@ -22,7 +22,7 @@ class RegistrationController extends AbstractController
         Security $security,
     ): Response {
         if ($this->getUser()) {
-            return $this->redirectToRoute('app_home');
+            return $this->redirectToRoute('app_dashboard');
         }
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -39,7 +39,7 @@ class RegistrationController extends AbstractController
 
             $security->login($user, 'form_login', 'main');
 
-            $redirect = $this->generateUrl('app_home');
+            $redirect = $this->generateUrl('app_dashboard');
 
             if ($request->isXmlHttpRequest()) {
                 return $this->json(['redirect' => $redirect]);

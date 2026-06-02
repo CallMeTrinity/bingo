@@ -17,8 +17,18 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class BingoController extends AbstractController
 {
-    #[Route('/', name: 'app_home', methods: ['GET', 'POST'])]
-    public function home(Request $request, BingoRepository $br, BingoChecker $checker, EntityManagerInterface $em): Response
+    #[Route('/', name: 'app_home', methods: ['GET'])]
+    public function home(): Response
+    {
+        if ($this->getUser() !== null) {
+            return $this->redirectToRoute('app_dashboard');
+        }
+
+        return $this->render('landing.html.twig');
+    }
+
+    #[Route('/mes-bingos', name: 'app_dashboard', methods: ['GET', 'POST'])]
+    public function dashboard(Request $request, BingoRepository $br, BingoChecker $checker, EntityManagerInterface $em): Response
     {
         $bingo = new Bingo();
         $form = $this->createForm(BingoType::class, $bingo);
@@ -104,7 +114,7 @@ final class BingoController extends AbstractController
 
         $this->addFlash('success', sprintf('Bingo « %s » envoyé à la corbeille.', $bingo->getTitle()));
 
-        return $this->redirectToRoute('app_home');
+        return $this->redirectToRoute('app_dashboard');
     }
 
     #[Route('/bingo/{slug}/restore', name: 'bingo_restore', methods: ['POST'])]
