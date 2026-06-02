@@ -37,18 +37,29 @@
 
 /* ─── Tweaks panel ──────────────────────────── */
 
+/* Ancre flottante. Réécrit position:fixed sans passer par les utilities
+   Tailwind, qui sont layered (utilities) et perdent contre la règle
+   `body > *` unlayered de bingo.css. */
+.tweaks-anchor {
+    position: fixed;
+    bottom: 1.25rem;
+    right: 1.25rem;
+    z-index: 50;
+}
+
 .tweaks-trigger {
-    @apply w-11 h-11 rounded-full bg-paper border border-line-soft text-ink-soft
-           flex items-center justify-center cursor-pointer transition-all duration-200
-           shadow-card;
+    @apply w-11 h-11 rounded-full bg-paper border border-line-soft text-ink
+           text-xl flex items-center justify-center cursor-pointer
+           transition-all duration-200 shadow-card;
 }
 .tweaks-trigger:hover {
-    @apply text-ink -translate-y-0.5;
+    @apply -translate-y-0.5;
+    background: var(--color-accent-soft);
 }
 
 .tweaks-panel {
     @apply absolute bottom-full right-0 mb-3
-           w-64 p-5 rounded-card-lg bg-paper border border-line-soft;
+           w-96 p-5 rounded-card-lg bg-paper border border-line-soft;
     box-shadow: var(--shadow-pop);
 }
 

@@ -1,0 +1,42 @@
+<aside data-controller="tweaks"
+       data-tweaks-url-value="{{ path('app_preferences') }}"
+       data-tweaks-csrf-token-value="{{ csrf_token('preferences') }}"
+       class="tweaks-anchor">
+
+    <button type="button"
+            data-action="tweaks#toggle"
+            aria-label="Réglages"
+            class="tweaks-trigger">
+        ⚙
+    </button>
+
+    <div data-tweaks-target="panel" class="tweaks-panel hidden">
+        <div class="mb-4">
+            <div class="text-[11px] font-semibold tracking-widest uppercase text-ink-soft mb-2.5">Palette</div>
+            <div class="flex gap-2.5">
+                {% for p in ['lavande', 'ciel', 'sorbet', 'matcha'] %}
+                    <button type="button"
+                            data-action="tweaks#setPalette"
+                            data-tweaks-value-param="{{ p }}"
+                            aria-label="Palette {{ p }}"
+                            class="palette-swatch palette-swatch--{{ p }}"></button>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div>
+            <div class="text-[11px] font-semibold tracking-widest uppercase text-ink-soft mb-2.5">Densité</div>
+            <div class="flex gap-2">
+                {% for d, label in {'compact': 'Compact', 'regular': 'Régulier', 'comfy': 'Confort'} %}
+                    <button type="button"
+                            data-action="tweaks#setDensity"
+                            data-tweaks-value-param="{{ d }}"
+                            data-value="{{ d }}"
+                            class="density-option">
+                        {{ label }}
+                    </button>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</aside>

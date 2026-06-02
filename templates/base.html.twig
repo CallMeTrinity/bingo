@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr"
+data-palette="{{ app.user ? app.user.palette: '' }}"
+data-density="{{ app.user ? app.user.density: '' }}"
+>
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
@@ -7,6 +10,13 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+        <script>
+            (function() {
+                const h = document.documentElement;
+                if (!h.dataset.palette) h.dataset.palette = localStorage.getItem('bingo.palette') || 'lavande';
+                if (!h.dataset.density) h.dataset.density = localStorage.getItem('bingo.density') || 'regular';
+            })();
+        </script>
         {% block stylesheets %}
         {% endblock %}
 
@@ -23,5 +33,8 @@
     </head>
     <body>
         {% block body %}{% endblock %}
+        {% if app.user %}
+            {{ include('components/_tweaks.html.twig') }}
+        {% endif %}
     </body>
 </html>
