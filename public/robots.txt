@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /bingo/
+Disallow: /corbeille
+Disallow: /preferences
+Disallow: /login
+Disallow: /register
+Disallow: /uploads/
+Allow: /b/
+Allow: /

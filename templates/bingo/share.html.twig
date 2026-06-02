@@ -1,6 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Bingo {{ bingo.title }} — {{ bingo.year }}{% endblock %}
+{% set ownerName = bingo.owner.displayName ?: bingo.owner.userIdentifier %}
+
+{% block title %}{{ bingo.title }} · {{ bingo.year }} par {{ ownerName }}{% endblock %}
+
+{% block meta_description %}Découvre « {{ bingo.title }} » — le bingo annuel de {{ ownerName }} pour {{ bingo.year }}. {{ bingo.bingoItems|length }} cases à coller, à cocher, à vivre.{% endblock %}
+
+{% block meta_robots %}index,follow{% endblock %}
+
+{% block meta_canonical %}<link rel="canonical" href="{{ url('bingo_share', { slug: bingo.slug }) }}">{% endblock %}
+
+{% block og_type %}article{% endblock %}
 
 {% set eyebrow = 'text-[11px] font-semibold tracking-widest uppercase text-ink-soft' %}
 
