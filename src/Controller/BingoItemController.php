@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\BingoItem;
 use App\Form\BingoItemType;
+use App\Security\Voter\BingoVoter;
 use App\Service\BingoChecker;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,6 +21,7 @@ class BingoItemController extends AbstractController
         if ($bingo === null || $bingo->isTrashed()) {
             throw $this->createNotFoundException('Bingo not found');
         }
+        $this->denyAccessUnlessGranted(BingoVoter::EDIT, $bingo);
         $wasDone = $item->getCompletedAt() !== null;
 
         if ($wasDone) {
@@ -59,6 +61,7 @@ class BingoItemController extends AbstractController
         if ($bingo === null || $bingo->isTrashed()) {
             throw $this->createNotFoundException('Bingo not found');
         }
+        $this->denyAccessUnlessGranted(BingoVoter::EDIT, $bingo);
         $form = $this->createForm(BingoItemType::class, $item, [
             'completed_default' => $item->getCompletedAt() !== null,
         ]);

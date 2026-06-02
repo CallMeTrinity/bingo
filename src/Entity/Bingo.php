@@ -19,7 +19,7 @@ class Bingo
 
     #[ORM\Column]
     #[Assert\NotBlank(message: 'L\'année est requise.')]
-    #[Assert\Range(min: 1900, max: 2100, notInRangeMessage: 'L\'année doit être entre {{ min }} et {{ max }}.')]
+    #[Assert\Range(notInRangeMessage: 'L\'année doit être entre {{ min }} et {{ max }}.', min: 1900, max: 2100)]
     private ?int $year = null;
 
     #[ORM\Column(length: 255)]
@@ -41,6 +41,9 @@ class Bingo
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $deletedAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'bingos')]
+    private ?User $owner = null;
 
     public function __construct()
     {
@@ -153,5 +156,17 @@ class Bingo
     public function isTrashed(): bool
     {
         return $this->deletedAt !== null;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): static
+    {
+        $this->owner = $owner;
+
+        return $this;
     }
 }

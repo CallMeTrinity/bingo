@@ -4,13 +4,17 @@ namespace App\DataFixtures;
 
 use App\Entity\Bingo;
 use App\Entity\BingoItem;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class BingoFixtures extends Fixture
+class BingoFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
+        $user = $manager->getRepository(User::class)->findOneBy(['email' => UserFixtures::ADMIN_EMAIL]);
+
         $bingos = [
             ['title' => 'Bingo 2024', 'slug' => 'y2024', 'year' => 2024, 'items' => [
                 'Rencontrer un nouveau chat', 'Faire une séance de yoga', 'Tenir l\'équilibre (5s)', 'Faire un feu de camp',
@@ -40,7 +44,7 @@ class BingoFixtures extends Fixture
         ];
 
         foreach ($bingos as $bingoData) {
-            $bingo = $this->createBingo($bingoData['title'], $bingoData['slug'], $bingoData['year']);
+            $bingo = $this->createBingo($bingoData['title'], $bingoData['slug'], $bingoData['year'], $user);
             $manager->persist($bingo);
 
             foreach ($bingoData['items'] as $position => $label) {
@@ -53,9 +57,11 @@ class BingoFixtures extends Fixture
         $manager->flush();
     }
 
-    private function createBingo(string $title, string $slug, int $year): Bingo
+    private function createBingo(string $title, string $slug, int $year, User $user): Bingo
     {
+
         $bingo = new Bingo();
+        $bingo->setOwner($user);
         $bingo->setTitle($title);
         $bingo->setSlug($slug);
         $bingo->setYear($year);
@@ -69,5 +75,10 @@ class BingoFixtures extends Fixture
         $bingoItem->setLabel($label);
         $bingoItem->setPosition($position);
         return $bingoItem;
+    }
+
+    public function getDependencies(): array
+    {
+        return [UserFixtures::class];
     }
 }

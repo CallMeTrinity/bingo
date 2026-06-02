@@ -6,6 +6,7 @@ use App\Entity\Bingo;
 use App\Entity\BingoItem;
 use App\Form\BingoType;
 use App\Repository\BingoRepository;
+use App\Security\Voter\BingoVoter;
 use App\Service\BingoChecker;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,8 +22,10 @@ final class BingoController extends AbstractController
         $bingo = new Bingo();
         $form = $this->createForm(BingoType::class, $bingo);
         $form->handleRequest($request);
+        $user = $this->getUser();
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $bingo->setOwner($user);
             $cellCount = $bingo->getSize() ** 2;
             for ($position = 1; $position <= $cellCount; $position++) {
                 $item = new BingoItem();
@@ -38,12 +41,12 @@ final class BingoController extends AbstractController
 
         $entries = array_map(
             fn(Bingo $bingo) => $this->buildEntry($bingo, $checker),
-            $br->findActive(),
+            $br->findActiveForOwner($user),
         );
 
         return $this->render('home.html.twig', [
             'entries' => $entries,
-            'trashCount' => $br->countTrashed(),
+            'trashCount' => $br->countTrashed($user),
             'form' => $form,
             'openModal' => $form->isSubmitted(),
         ]);
@@ -52,9 +55,10 @@ final class BingoController extends AbstractController
     #[Route('/corbeille', name: 'bingo_trash', methods: ['GET'])]
     public function trash(BingoRepository $br, BingoChecker $checker): Response
     {
+        $user = $this->getUser();
         $entries = array_map(
             fn(Bingo $bingo) => $this->buildEntry($bingo, $checker),
-            $br->findTrashed(),
+            $br->findTrashed($user),
         );
 
         return $this->render('bingo/trash.html.twig', [
@@ -69,6 +73,7 @@ final class BingoController extends AbstractController
         if (!$bingo) {
             throw $this->createNotFoundException('Bingo not found');
         }
+        $this->denyAccessUnlessGranted(BingoVoter::EDIT, $bingo);
 
         if (!$this->isCsrfTokenValid('delete_bingo_'.$bingo->getSlug(), (string) $request->request->get('_token'))) {
             throw $this->createAccessDeniedException('Jeton CSRF invalide.');
@@ -89,6 +94,7 @@ final class BingoController extends AbstractController
         if (!$bingo) {
             throw $this->createNotFoundException('Bingo not found');
         }
+        $this->denyAccessUnlessGranted(BingoVoter::EDIT, $bingo);
 
         if (!$this->isCsrfTokenValid('restore_bingo_'.$bingo->getSlug(), (string) $request->request->get('_token'))) {
             throw $this->createAccessDeniedException('Jeton CSRF invalide.');
@@ -109,6 +115,7 @@ final class BingoController extends AbstractController
         if (!$bingo) {
             throw $this->createNotFoundException('Bingo not found');
         }
+        $this->denyAccessUnlessGranted(BingoVoter::EDIT, $bingo);
 
         if (!$this->isCsrfTokenValid('destroy_bingo_'.$bingo->getSlug(), (string) $request->request->get('_token'))) {
             throw $this->createAccessDeniedException('Jeton CSRF invalide.');
@@ -127,6 +134,7 @@ final class BingoController extends AbstractController
     public function index(string $slug, BingoRepository $br, BingoChecker $checker): Response
     {
         $bingoData = $this->loadBingoView($slug, $br);
+        $this->denyAccessUnlessGranted(BingoVoter::EDIT, $bingoData['bingo']);
 
         return $this->render('bingo/index.html.twig', [
             ...$bingoData,

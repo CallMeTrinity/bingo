@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Bingo;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends ServiceEntityRepository<Bingo>
@@ -17,10 +19,12 @@ class BingoRepository extends ServiceEntityRepository
     }
 
     /** @return Bingo[] */
-    public function findActive(): array
+    public function findActiveForOwner(UserInterface $owner): array
     {
         return $this->createQueryBuilder('b')
             ->andWhere('b.deletedAt IS NULL')
+            ->andWhere('b.owner = :user')
+            ->setParameter('user', $owner)
             ->orderBy('b.year', 'DESC')
             ->addOrderBy('b.id', 'DESC')
             ->getQuery()
@@ -28,10 +32,12 @@ class BingoRepository extends ServiceEntityRepository
     }
 
     /** @return Bingo[] */
-    public function findTrashed(): array
+    public function findTrashed(UserInterface $owner): array
     {
         return $this->createQueryBuilder('b')
             ->andWhere('b.deletedAt IS NOT NULL')
+            ->andWhere('b.owner = :user')
+            ->setParameter('user', $owner)
             ->orderBy('b.deletedAt', 'DESC')
             ->getQuery()
             ->getResult();
@@ -52,11 +58,13 @@ class BingoRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function countTrashed(): int
+    public function countTrashed(UserInterface $owner): int
     {
         return (int) $this->createQueryBuilder('b')
             ->select('COUNT(b.id)')
             ->andWhere('b.deletedAt IS NOT NULL')
+            ->andWhere('b.owner = :user')
+            ->setParameter('user', $owner)
             ->getQuery()
             ->getSingleScalarResult();
     }
