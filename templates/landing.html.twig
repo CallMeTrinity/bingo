@@ -7,8 +7,8 @@
 
 {% block body %}
     <header class="px-7 py-5 flex items-center justify-between max-w-6xl mx-auto">
-        <a href="{{ path('app_home') }}" aria-label="Accueil" class="flex items-center gap-3">
-            <span class="w-10 h-10 rounded-2xl bg-accent flex items-center justify-center font-serif text-[22px] text-ink shadow-[0_2px_6px_-2px_rgba(42,38,64,.18),0_1px_0_rgba(255,255,255,.5)_inset]">B</span>
+        <a href="{{ path('app_home') }}" class="flex items-center gap-3">
+            <span aria-hidden="true" class="w-10 h-10 rounded-2xl bg-accent flex items-center justify-center font-serif text-[22px] text-ink shadow-[0_2px_6px_-2px_rgba(42,38,64,.18),0_1px_0_rgba(255,255,255,.5)_inset]">B</span>
             <span class="font-serif text-[20px]">Bingo</span>
         </a>
         <nav class="flex items-center gap-2">
@@ -23,7 +23,7 @@
                 <div class="text-[11px] font-semibold tracking-widest uppercase text-ink-soft">Carnet pastel</div>
                 <h1 class="font-serif text-[44px] sm:text-[56px] leading-[1.02] mt-2">
                     Tes défis,<br>
-                    <span class="text-accent">une grille</span><br>
+                    <span class="bg-accent/50 px-3 -mx-1 rounded-lg">une grille</span><br>
                     à remplir.
                 </h1>
                 <p class="font-hand text-[24px] text-ink-soft mt-5 -rotate-1">
@@ -41,7 +41,7 @@
                         J'ai déjà un compte
                     </a>
                 </div>
-                <p class="text-[13px] text-ink-faint mt-5">
+                <p class="text-[13px] text-ink-soft mt-5">
                     Gratuit, sans pub, sans tracker.
                 </p>
             </div>
@@ -53,7 +53,7 @@
                             <div class="text-[11px] font-semibold tracking-widest uppercase text-ink-soft">Aperçu</div>
                             <div class="font-serif text-[20px]">Mes envies</div>
                         </div>
-                        <div class="font-hand text-[18px] text-accent -rotate-3">3 / 16</div>
+                        <div class="font-hand text-[18px] text-ink-soft -rotate-3">3 / 16</div>
                     </div>
                     <div class="grid grid-cols-4 gap-2">
                         {% set previewItems = [
@@ -116,7 +116,7 @@
         </section>
     </main>
 
-    <footer class="max-w-6xl mx-auto px-7 pb-10 text-[13px] text-ink-faint flex items-center justify-between">
+    <footer class="max-w-6xl mx-auto px-7 pb-10 text-[13px] text-ink-soft flex items-center justify-between">
         <span>© Bingo</span>
         <span class="font-hand text-[16px]">fait avec soin</span>
     </footer>
