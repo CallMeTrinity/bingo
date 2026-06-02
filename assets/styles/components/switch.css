@@ -22,7 +22,7 @@
 }
 
 .switch[aria-checked="true"] {
-    @apply bg-lavender border-lavender;
+    @apply bg-accent border-accent;
 }
 
 .switch__thumb {

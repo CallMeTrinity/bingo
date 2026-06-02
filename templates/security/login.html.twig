@@ -2,14 +2,14 @@
 
 {% block title %}Connexion{% endblock %}
 
-{% set inputClass = 'px-3.5 py-2.5 rounded-xl bg-cream/60 border border-line-soft focus:outline-none focus:border-lavender focus:bg-paper text-ink placeholder:text-ink-faint transition-colors' %}
+{% set inputClass = 'px-3.5 py-2.5 rounded-xl bg-cream/60 border border-line-soft focus:outline-none focus:border-accent focus:bg-paper text-ink placeholder:text-ink-faint transition-colors' %}
 {% set labelClass = 'text-[11px] font-semibold tracking-widest uppercase text-ink-soft' %}
 
 {% block body %}
     <main class="min-h-screen flex items-center justify-center px-5 py-10">
         <div class="w-full max-w-md">
             <a href="{{ path('app_home') }}" aria-label="Accueil"
-               class="inline-flex w-12 h-12 mb-6 rounded-2xl bg-lavender items-center justify-center font-serif text-[26px] text-ink shadow-[0_2px_6px_-2px_rgba(42,38,64,.18),0_1px_0_rgba(255,255,255,.5)_inset] hover:-rotate-6 transition-transform">
+               class="inline-flex w-12 h-12 mb-6 rounded-2xl bg-accent items-center justify-center font-serif text-[26px] text-ink shadow-[0_2px_6px_-2px_rgba(42,38,64,.18),0_1px_0_rgba(255,255,255,.5)_inset] hover:-rotate-6 transition-transform">
                 B
             </a>
 
@@ -18,7 +18,7 @@
                     <div class="{{ labelClass }}">Connexion</div>
                     <h1 class="font-serif text-[28px] leading-tight mt-0.5">Retour au carnet</h1>
                     <p class="font-hand text-[18px] text-ink-soft mt-1.5 -rotate-1">
-                        <span class="text-lavender">✦</span> Reprends là où tu t'es arrêté.
+                        <span class="text-accent">✦</span> Reprends là où tu t'es arrêté.
                     </p>
                 </div>
 
@@ -31,7 +31,7 @@
                 {% if app.user %}
                     <div class="mb-4 px-4 py-3 rounded-xl border bg-mint/40 border-mint text-ink text-[14px]">
                         Tu es déjà connecté en tant que <strong>{{ app.user.userIdentifier }}</strong>.
-                        <a href="{{ path('app_logout') }}" class="text-lavender hover:underline">Se déconnecter</a>
+                        <a href="{{ path('app_logout') }}" class="text-accent hover:underline">Se déconnecter</a>
                     </div>
                 {% endif %}
 
@@ -69,7 +69,7 @@
 
                 <p class="text-center text-[13px] text-ink-soft mt-5">
                     Pas encore de compte ?
-                    <a href="{{ path('app_register') }}" class="text-lavender hover:underline">Créer un compte</a>
+                    <a href="{{ path('app_register') }}" class="text-accent hover:underline">Créer un compte</a>
                 </p>
             </div>
         </div>

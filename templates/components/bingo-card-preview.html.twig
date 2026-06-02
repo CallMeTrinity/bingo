@@ -16,7 +16,7 @@
 
         <div class="flex items-start justify-between gap-3">
             <div class="flex flex-col gap-1.5 min-w-0">
-                <span class="inline-flex items-center self-start px-2.5 py-0.5 rounded-full bg-lavender text-[11px] font-semibold tracking-wide text-ink shadow-[0_1px_0_rgba(255,255,255,.6)_inset]">
+                <span class="inline-flex items-center self-start px-2.5 py-0.5 rounded-full bg-accent text-[11px] font-semibold tracking-wide text-ink shadow-[0_1px_0_rgba(255,255,255,.6)_inset]">
                     {{ bingo.year }}
                 </span>
                 <h2 class="font-serif text-[22px] leading-tight truncate">{{ bingo.title }}</h2>
@@ -29,7 +29,7 @@
             </div>
 
             {% if entry.hasBingo %}
-                <span class="font-hand text-[22px] text-lavender -rotate-3 shrink-0">Bingo !</span>
+                <span class="font-hand text-[22px] text-accent -rotate-3 shrink-0">Bingo !</span>
             {% endif %}
         </div>
 

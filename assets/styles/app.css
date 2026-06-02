@@ -3,6 +3,7 @@
 @import "./components/btn.css";
 @import "./components/switch.css";
 @import "./components/emoji-picker.css";
+@import "./components/palette.css";
 
 @theme {
     --color-cream: #faf7f2;
@@ -18,6 +19,14 @@
     --color-mint: #b8e0d2;
     --color-sky: #bde0fe;
     --color-butter: #fde4a6;
+
+    /* Accent = couleur de marque (CTA, focus, decorations). Override via [data-palette]. */
+    --color-accent: #cdb4db;
+    --color-accent-soft: rgba(205, 180, 219, .3);
+
+    /* Densité de la grille. Override via [data-density]. */
+    --cell-gap: 12px;
+    --cell-padding: 14px;
 
     --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
     --font-serif: 'Instrument Serif', 'Times New Roman', serif;

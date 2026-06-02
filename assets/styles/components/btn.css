@@ -25,7 +25,7 @@
 
 /* Primary : CTA principal (submit, action positive) */
 .btn--primary {
-    @apply bg-lavender text-ink
+    @apply bg-accent text-ink
            shadow-[0_1px_0_rgba(255,255,255,.6)_inset,0_4px_12px_-4px_rgba(42,38,64,.18)];
 }
 .btn--primary:hover {

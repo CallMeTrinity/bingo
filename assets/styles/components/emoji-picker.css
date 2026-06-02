@@ -10,11 +10,11 @@ emoji-picker {
     --border-radius: var(--radius-card);
     --border-size: 1px;
 
-    --button-active-background: var(--color-lavender);
+    --button-active-background: var(--color-accent);
     --button-hover-background: var(--color-cream);
 
-    --indicator-color: var(--color-lavender);
-    --outline-color: var(--color-lavender);
+    --indicator-color: var(--color-accent);
+    --outline-color: var(--color-accent);
 
     --input-border-color: var(--color-line-soft);
     --input-border-radius: 12px;

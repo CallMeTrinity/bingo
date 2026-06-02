@@ -1,0 +1,92 @@
+/* ============================================
+   Palettes & densité.
+   Override des CSS variables --color-accent
+   et --cell-* via [data-palette] / [data-density]
+   posés sur <html>.
+   ============================================ */
+
+[data-palette="lavande"] {
+    --color-accent: #cdb4db;
+    --color-accent-soft: rgba(205, 180, 219, .3);
+}
+[data-palette="ciel"] {
+    --color-accent: #bde0fe;
+    --color-accent-soft: rgba(189, 224, 254, .3);
+}
+[data-palette="sorbet"] {
+    --color-accent: #ffc8dd;
+    --color-accent-soft: rgba(255, 200, 221, .3);
+}
+[data-palette="matcha"] {
+    --color-accent: #b8e0d2;
+    --color-accent-soft: rgba(184, 224, 210, .3);
+}
+
+[data-density="compact"] {
+    --cell-gap: 8px;
+    --cell-padding: 10px;
+}
+[data-density="regular"] {
+    --cell-gap: 12px;
+    --cell-padding: 14px;
+}
+[data-density="comfy"] {
+    --cell-gap: 18px;
+    --cell-padding: 18px;
+}
+
+/* ─── Tweaks panel ──────────────────────────── */
+
+.tweaks-trigger {
+    @apply w-11 h-11 rounded-full bg-paper border border-line-soft text-ink-soft
+           flex items-center justify-center cursor-pointer transition-all duration-200
+           shadow-card;
+}
+.tweaks-trigger:hover {
+    @apply text-ink -translate-y-0.5;
+}
+
+.tweaks-panel {
+    @apply absolute bottom-full right-0 mb-3
+           w-64 p-5 rounded-card-lg bg-paper border border-line-soft;
+    box-shadow: var(--shadow-pop);
+}
+
+/* ─── Palette swatches ──────────────────────── */
+
+.palette-swatch {
+    @apply w-9 h-9 rounded-full border-2 border-paper cursor-pointer transition-transform duration-150;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, .6) inset, 0 2px 6px -2px rgba(42, 38, 64, .15);
+}
+.palette-swatch:hover {
+    @apply -translate-y-0.5;
+}
+
+.palette-swatch--lavande { background: #cdb4db; }
+.palette-swatch--ciel    { background: #bde0fe; }
+.palette-swatch--sorbet  { background: #ffc8dd; }
+.palette-swatch--matcha  { background: #b8e0d2; }
+
+/* L'attribut sur <html> détermine quel swatch est actif. */
+[data-palette="lavande"] .palette-swatch--lavande,
+[data-palette="ciel"]    .palette-swatch--ciel,
+[data-palette="sorbet"]  .palette-swatch--sorbet,
+[data-palette="matcha"]  .palette-swatch--matcha {
+    @apply ring-2 ring-ink ring-offset-2 ring-offset-paper;
+}
+
+/* ─── Density picker ────────────────────────── */
+
+.density-option {
+    @apply flex-1 text-center px-3 py-2 rounded-xl bg-cream/60 border border-line-soft
+           text-ink-soft text-[13px] font-semibold cursor-pointer transition-colors;
+}
+.density-option:hover {
+    @apply bg-paper text-ink;
+}
+
+[data-density="compact"] .density-option[data-value="compact"],
+[data-density="regular"] .density-option[data-value="regular"],
+[data-density="comfy"]   .density-option[data-value="comfy"] {
+    @apply bg-accent text-ink border-accent shadow-[0_1px_0_rgba(255,255,255,.6)_inset];
+}

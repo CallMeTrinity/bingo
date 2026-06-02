@@ -18,7 +18,7 @@
             {{ form_label(form.emoji, null, { label_attr: { class: 'text-[11px] font-semibold tracking-widest uppercase text-ink-soft' } }) }}
             {{ form_widget(form.emoji, {
                 attr: {
-                    class: 'px-2 py-2.5 rounded-xl bg-cream/60 border border-line-soft focus:outline-none focus:border-lavender focus:bg-paper text-ink placeholder:text-ink-faint transition-colors text-[22px] text-center leading-none cursor-pointer',
+                    class: 'px-2 py-2.5 rounded-xl bg-cream/60 border border-line-soft focus:outline-none focus:border-accent focus:bg-paper text-ink placeholder:text-ink-faint transition-colors text-[22px] text-center leading-none cursor-pointer',
                     'data-emoji-picker-target': 'input',
                     'data-action': 'focus->emoji-picker#open click->emoji-picker#open',
                     readonly: 'readonly',
@@ -29,25 +29,25 @@
         </div>
         <div class="flex flex-col gap-1.5 flex-1">
             {{ form_label(form.label, null, { label_attr: { class: 'text-[11px] font-semibold tracking-widest uppercase text-ink-soft' } }) }}
-            {{ form_widget(form.label, { attr: { class: 'px-3.5 py-2.5 rounded-xl bg-cream/60 border border-line-soft focus:outline-none focus:border-lavender focus:bg-paper text-ink placeholder:text-ink-faint transition-colors w-full' } }) }}
+            {{ form_widget(form.label, { attr: { class: 'px-3.5 py-2.5 rounded-xl bg-cream/60 border border-line-soft focus:outline-none focus:border-accent focus:bg-paper text-ink placeholder:text-ink-faint transition-colors w-full' } }) }}
             {{ form_errors(form.label, { attr: { class: 'text-[12px] text-rose-600' } }) }}
         </div>
     </div>
 
     <div class="flex flex-col gap-1.5">
         {{ form_label(form.note, null, { label_attr: { class: 'text-[11px] font-semibold tracking-widest uppercase text-ink-soft' } }) }}
-        {{ form_widget(form.note, { attr: { class: 'px-3.5 py-2.5 rounded-xl bg-cream/60 border border-line-soft focus:outline-none focus:border-lavender focus:bg-paper text-ink placeholder:text-ink-faint transition-colors font-hand text-[16px] leading-snug resize-none' } }) }}
+        {{ form_widget(form.note, { attr: { class: 'px-3.5 py-2.5 rounded-xl bg-cream/60 border border-line-soft focus:outline-none focus:border-accent focus:bg-paper text-ink placeholder:text-ink-faint transition-colors font-hand text-[16px] leading-snug resize-none' } }) }}
         {{ form_errors(form.note, { attr: { class: 'text-[12px] text-rose-600' } }) }}
     </div>
 
     <div class="flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl bg-cream/60 border border-line-soft">
         <div class="flex items-center gap-2.5">
-            {{ form_widget(form.completed, { attr: { class: 'w-4 h-4 accent-lavender cursor-pointer' } }) }}
+            {{ form_widget(form.completed, { attr: { class: 'w-4 h-4 accent-accent cursor-pointer' } }) }}
             {{ form_label(form.completed, null, { label_attr: { class: 'text-[14px] text-ink cursor-pointer select-none' } }) }}
         </div>
         {% if item.completedAt %}
             <span class="text-[12px] text-ink-soft">
-                <span class="font-hand text-lavender mr-0.5">✓</span>
+                <span class="font-hand text-accent mr-0.5">✓</span>
                 <time datetime="{{ item.completedAt|date('c') }}">{{ item.completedAt|date('d/m/Y') }}</time>
             </span>
         {% endif %}
