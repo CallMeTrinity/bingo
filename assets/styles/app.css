@@ -2,6 +2,7 @@
 @import "./components/bingo.css";
 @import "./components/btn.css";
 @import "./components/switch.css";
+@import "./components/emoji-picker.css";
 
 @theme {
     --color-cream: #faf7f2;

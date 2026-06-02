@@ -13,10 +13,25 @@
     }
 }) }}
 
-    <div class="flex flex-col gap-1.5">
-        {{ form_label(form.label, null, { label_attr: { class: 'text-[11px] font-semibold tracking-widest uppercase text-ink-soft' } }) }}
-        {{ form_widget(form.label, { attr: { class: 'px-3.5 py-2.5 rounded-xl bg-cream/60 border border-line-soft focus:outline-none focus:border-lavender focus:bg-paper text-ink placeholder:text-ink-faint transition-colors' } }) }}
-        {{ form_errors(form.label, { attr: { class: 'text-[12px] text-rose-600' } }) }}
+    <div class="flex gap-3">
+        <div class="flex flex-col gap-1.5 w-12 relative" data-controller="emoji-picker">
+            {{ form_label(form.emoji, null, { label_attr: { class: 'text-[11px] font-semibold tracking-widest uppercase text-ink-soft' } }) }}
+            {{ form_widget(form.emoji, {
+                attr: {
+                    class: 'px-2 py-2.5 rounded-xl bg-cream/60 border border-line-soft focus:outline-none focus:border-lavender focus:bg-paper text-ink placeholder:text-ink-faint transition-colors text-[22px] text-center leading-none cursor-pointer',
+                    'data-emoji-picker-target': 'input',
+                    'data-action': 'focus->emoji-picker#open click->emoji-picker#open',
+                    readonly: 'readonly',
+                }
+            }) }}
+            {{ form_errors(form.emoji, { attr: { class: 'text-[12px] text-rose-600' } }) }}
+            <div data-emoji-picker-target="popup" class="absolute top-full left-0 mt-2 z-50 hidden"></div>
+        </div>
+        <div class="flex flex-col gap-1.5 flex-1">
+            {{ form_label(form.label, null, { label_attr: { class: 'text-[11px] font-semibold tracking-widest uppercase text-ink-soft' } }) }}
+            {{ form_widget(form.label, { attr: { class: 'px-3.5 py-2.5 rounded-xl bg-cream/60 border border-line-soft focus:outline-none focus:border-lavender focus:bg-paper text-ink placeholder:text-ink-faint transition-colors w-full' } }) }}
+            {{ form_errors(form.label, { attr: { class: 'text-[12px] text-rose-600' } }) }}
+        </div>
     </div>
 
     <div class="flex flex-col gap-1.5">

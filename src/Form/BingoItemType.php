@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
 
 class BingoItemType extends AbstractType
 {
@@ -30,6 +31,12 @@ class BingoItemType extends AbstractType
                 'mapped' => false,
                 'required' => false,
                 'data' => $options['completed_default'],
+            ])
+            ->add('emoji', TextType::class, [
+                'label' => 'Emoji',
+                'required' => false,
+                'attr' => ['placeholder' => '😀'],
+                'constraints' => [new Length(max: 16)],
             ])
         ;
     }

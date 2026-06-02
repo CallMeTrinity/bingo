@@ -28,4 +28,7 @@ return [
     'modern-screenshot' => [
         'version' => '4.7.0',
     ],
+    'emoji-picker-element' => [
+        'version' => '1.29.1',
+    ],
 ];

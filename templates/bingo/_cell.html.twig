@@ -17,7 +17,12 @@ Params:
     data-bingo-cell-position-value="{{ item.position }}"
     data-tone="{{ item.position % 5 }}"
     class="bingo-cell group{{ item.completedAt ? ' done' : '' }}{{ item.position in linePositions ? ' in-line' : '' }} relative">
-    <div class="flex justify-end">
+    <div class="flex justify-between items-start">
+        {% if item.emoji %}
+            <div class="cell-emoji text-3xl leading-none">{{ item.emoji }}</div>
+        {% else %}
+            <div></div>
+        {% endif %}
         <div
             class="cell-check w-5.5 h-5.5 rounded-full border border-dashed border-ink-faint flex items-center justify-center transition-all duration-200">
             <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"

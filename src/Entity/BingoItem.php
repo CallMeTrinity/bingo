@@ -29,6 +29,9 @@ class BingoItem
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $note = null;
 
+    #[ORM\Column(length: 16, nullable: true)]
+    private ?string $emoji = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -90,6 +93,18 @@ class BingoItem
     public function setNote(?string $note): static
     {
         $this->note = $note;
+
+        return $this;
+    }
+
+    public function getEmoji(): ?string
+    {
+        return $this->emoji;
+    }
+
+    public function setEmoji(?string $emoji): static
+    {
+        $this->emoji = $emoji === '' ? null : $emoji;
 
         return $this;
     }
