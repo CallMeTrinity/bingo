@@ -31,6 +31,7 @@ final class BingoController extends AbstractController
     public function dashboard(Request $request, BingoRepository $br, BingoChecker $checker, EntityManagerInterface $em): Response
     {
         $bingo = new Bingo();
+        $bingo->setYear((int) date('Y'));
         $form = $this->createForm(BingoType::class, $bingo);
         $form->handleRequest($request);
         $user = $this->getUser();

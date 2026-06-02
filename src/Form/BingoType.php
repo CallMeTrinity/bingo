@@ -18,7 +18,7 @@ class BingoType extends AbstractType
         $builder
             ->add('title', TextType::class, [
                 'label' => 'Titre',
-                'attr' => ['placeholder' => 'Ex : Mes résolutions 2028', 'autofocus' => true],
+                'attr' => ['placeholder' => 'Ex : Mes résolutions, bingo-janvier…', 'autofocus' => true],
             ])
             ->add('year', IntegerType::class, [
                 'label' => 'Année',

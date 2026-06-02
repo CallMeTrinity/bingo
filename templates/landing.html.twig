@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Bingo annuel — coche tes défis de l'année{% endblock %}
-{% block meta_description %}Un carnet pastel pour transformer ton année en grille de défis. Crée ton bingo annuel, coche tes cases, vise les lignes.{% endblock %}
+{% block title %}Bingo — coche tes défis{% endblock %}
+{% block meta_description %}Un carnet pastel pour transformer tes envies en grille de défis. Crée ton bingo, coche tes cases, vise les lignes.{% endblock %}
 {% block meta_robots %}index,follow{% endblock %}
 {% block meta_canonical %}<link rel="canonical" href="{{ url('app_home') }}">{% endblock %}
 
@@ -9,7 +9,7 @@
     <header class="px-7 py-5 flex items-center justify-between max-w-6xl mx-auto">
         <a href="{{ path('app_home') }}" aria-label="Accueil" class="flex items-center gap-3">
             <span class="w-10 h-10 rounded-2xl bg-accent flex items-center justify-center font-serif text-[22px] text-ink shadow-[0_2px_6px_-2px_rgba(42,38,64,.18),0_1px_0_rgba(255,255,255,.5)_inset]">B</span>
-            <span class="font-serif text-[20px]">Bingo annuel</span>
+            <span class="font-serif text-[20px]">Bingo</span>
         </a>
         <nav class="flex items-center gap-2">
             <a href="{{ path('app_login') }}" class="btn btn--ghost btn--sm">Connexion</a>
@@ -22,15 +22,15 @@
             <div>
                 <div class="text-[11px] font-semibold tracking-widest uppercase text-ink-soft">Carnet pastel</div>
                 <h1 class="font-serif text-[44px] sm:text-[56px] leading-[1.02] mt-2">
-                    Une année,<br>
+                    Tes défis,<br>
                     <span class="text-accent">une grille</span><br>
                     à remplir.
                 </h1>
                 <p class="font-hand text-[24px] text-ink-soft mt-5 -rotate-1">
-                    <span class="text-accent">✦</span> Tes défis, en cases pastel.
+                    <span class="text-accent">✦</span> Tes envies, en cases pastel.
                 </p>
                 <p class="text-ink-soft text-[16px] leading-relaxed mt-6 max-w-md">
-                    Crée ton bingo annuel, note tes envies, coche au fil des mois.
+                    Crée ton bingo, note ce que tu veux faire, coche au fil de l'eau.
                     Quand une ligne tombe, c'est la fête.
                 </p>
                 <div class="flex flex-wrap items-center gap-3 mt-8">
@@ -51,7 +51,7 @@
                     <div class="flex items-center justify-between mb-4">
                         <div>
                             <div class="text-[11px] font-semibold tracking-widest uppercase text-ink-soft">Aperçu</div>
-                            <div class="font-serif text-[20px]">Mon année 2026</div>
+                            <div class="font-serif text-[20px]">Mes envies</div>
                         </div>
                         <div class="font-hand text-[18px] text-accent -rotate-3">3 / 16</div>
                     </div>
@@ -83,7 +83,7 @@
                     </div>
                 </div>
                 <div class="hidden sm:block absolute -top-6 -right-4 font-hand text-[20px] text-ink-soft -rotate-6">
-                    <span class="text-accent">↑</span> ta vraie année
+                    <span class="text-accent">↑</span> ta vraie grille
                 </div>
             </div>
         </section>
@@ -91,7 +91,7 @@
         <section class="mt-24 grid sm:grid-cols-3 gap-6">
             <article class="bg-paper border border-line-soft rounded-card-lg p-6 shadow-[0_2px_8px_-4px_rgba(42,38,64,.06)]">
                 <div class="w-10 h-10 rounded-xl bg-lavender/60 mb-4"></div>
-                <h2 class="font-serif text-[22px] leading-tight">Une grille par année</h2>
+                <h2 class="font-serif text-[22px] leading-tight">Une grille sur mesure</h2>
                 <p class="text-ink-soft text-[14px] leading-relaxed mt-2">Choisis ta taille, glisse tes envies, mélange. Le bingo se range tout seul dans ton carnet.</p>
             </article>
             <article class="bg-paper border border-line-soft rounded-card-lg p-6 shadow-[0_2px_8px_-4px_rgba(42,38,64,.06)]">
@@ -117,7 +117,7 @@
     </main>
 
     <footer class="max-w-6xl mx-auto px-7 pb-10 text-[13px] text-ink-faint flex items-center justify-between">
-        <span>© Bingo annuel</span>
+        <span>© Bingo</span>
         <span class="font-hand text-[16px]">fait avec soin</span>
     </footer>
 {% endblock %}
