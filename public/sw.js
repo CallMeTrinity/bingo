@@ -1,13 +1,15 @@
 // Bumper VERSION à chaque modification du SW ou du SHELL.
 // Les assets AssetMapper (/assets/*) sont hashés et immuables : ils n'exigent
 // jamais de bump, l'ancien cache est purgé à l'activation de la nouvelle version.
-const VERSION = 'v2';
+const VERSION = 'v3';
 const CACHE = `bingo-${VERSION}`;
+// `/pwa/` et pas `/icons/` : Apache (mutualisé) a un Alias global `/icons/`
+// vers ses propres icônes d'auto-index, qui masque tout dossier du même nom.
 const SHELL = [
     '/offline.html',
-    '/icons/icon-192.png',
-    '/icons/icon-512.png',
-    '/icons/apple-touch-icon.png',
+    '/pwa/icon-192.png',
+    '/pwa/icon-512.png',
+    '/pwa/apple-touch-icon.png',
     '/logo.png',
     '/manifest.json',
 ];
@@ -63,7 +65,7 @@ self.addEventListener('fetch', (event) => {
 
     // Ressources non hashées : stale-while-revalidate, pour que les mises à
     // jour d'icônes/manifest se propagent sans bump de VERSION.
-    const isMutable = url.pathname.startsWith('/icons/')
+    const isMutable = url.pathname.startsWith('/pwa/')
         || url.pathname === '/logo.png'
         || url.pathname === '/manifest.json';
 

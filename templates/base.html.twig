@@ -19,7 +19,7 @@ data-photo-filter="{{ app.user ? (app.user.photoFilter ? 'on' : 'off') : '' }}"
         <meta property="og:locale" content="fr_FR">
         <meta property="og:title" content="{% block og_title %}{{ block('title') }} · Bingo{% endblock %}">
         <meta property="og:description" content="{% block og_description %}{{ block('meta_description') }}{% endblock %}">
-        <meta property="og:image" content="{% block og_image %}{{ absolute_url('/icons/icon-512.png') }}{% endblock %}">
+        <meta property="og:image" content="{% block og_image %}{{ absolute_url('/pwa/icon-512.png') }}{% endblock %}">
         <meta property="og:url" content="{% block og_url %}{{ app.request.uri }}{% endblock %}">
         <meta name="twitter:card" content="summary">
 
@@ -30,7 +30,7 @@ data-photo-filter="{{ app.user ? (app.user.photoFilter ? 'on' : 'off') : '' }}"
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="default">
         <meta name="apple-mobile-web-app-title" content="Bingo">
-        <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+        <link rel="apple-touch-icon" href="/pwa/apple-touch-icon.png">
         <link rel="icon" href="/logo.png">
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
