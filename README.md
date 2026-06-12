@@ -89,13 +89,16 @@ Les cases sont adressées par position : ligne `r`, colonne `c` → position `r 
 | GET / POST | `/mes-bingos`                | `app_dashboard`    | Liste + création de bingo                |
 | GET        | `/bingo/{slug}`              | `bingo_show`       | Grille interactive (propriétaire)        |
 | GET        | `/b/{slug}`                  | `bingo_share`      | Grille publique en lecture seule         |
-| POST       | `/bingo/{id}/check`          | `bingo_item_check` | Toggle d'une case (réponse JSON)         |
-| GET / POST | `/bingo/item/{id}/edit`      | —                  | Édition modale d'une case                |
+| POST       | `/bingo/{id}/check`          | `bingo_check`      | Toggle d'une case (réponse JSON)         |
+| GET / POST | `/bingo/item/{id}/edit`      | `bingo_item_edit`  | Édition modale d'une case                |
 | POST       | `/bingo/{slug}/visibility`   | `bingo_visibility` | Bascule public / privé                   |
 | POST       | `/bingo/{slug}/delete`       | `bingo_delete`     | Envoi à la corbeille                     |
 | POST       | `/bingo/{slug}/restore`      | `bingo_restore`    | Restauration depuis la corbeille         |
 | POST       | `/bingo/{slug}/destroy`      | `bingo_destroy`    | Suppression définitive                   |
 | GET        | `/corbeille`                 | `bingo_trash`      | Corbeille de l'utilisateur               |
+| GET / POST | `/login`                     | `app_login`        | Connexion                                |
+| GET / POST | `/register`                  | `app_register`     | Inscription                              |
+| POST       | `/preferences`               | `app_preferences`  | Mise à jour des préférences utilisateur  |
 
 Les URL utilisent le `slug` du bingo (jamais l'`id` ni l'`year`, car plusieurs bingos peuvent partager une même année).
 
@@ -143,9 +146,18 @@ bingo/
 └── translations/
 ```
 
+## Documentation
+
+Plus de détails dans `docs/` :
+
+- [`docs/architecture.md`](docs/architecture.md) — modèle de données, routing, flux côté client, `BingoChecker`, sécurité.
+- [`docs/development.md`](docs/development.md) — workflow de dev, migrations, fixtures, Tailwind, tests.
+- [`docs/frontend.md`](docs/frontend.md) — controllers Stimulus, AssetMapper, conventions CSS, PWA.
+- [`docs/deployment.md`](docs/deployment.md) — script `deploy.sh`, workflow GitHub Actions, contraintes hébergeur.
+
 ## Déploiement
 
-Un script `deploy.sh` est fourni à la racine du projet.
+Un script `deploy.sh` à la racine est lancé en SSH par le workflow `.github/workflows/deploy.yml` à chaque push de tag `v*`. Voir [`docs/deployment.md`](docs/deployment.md) pour les détails.
 
 ## Licence
 
