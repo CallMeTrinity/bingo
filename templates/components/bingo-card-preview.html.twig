@@ -63,7 +63,7 @@
           data-controller="confirm"
           data-confirm-message-value="Mettre le bingo « {{ bingo.title|e('js') }} » à la corbeille ?"
           data-action="submit->confirm#submit"
-          class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
+          class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 focus-within:opacity-100 pointer-coarse:opacity-70 transition-opacity">
         <input type="hidden" name="_token" value="{{ csrf_token('delete_bingo_' ~ bingo.slug) }}">
         <button type="submit"
                 aria-label="Supprimer ce bingo"

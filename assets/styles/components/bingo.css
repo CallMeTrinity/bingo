@@ -62,6 +62,22 @@ body > * {
     animation: var(--animate-line-glow);
 }
 
+/* Mode édition (mobile) : un tap ouvre la modale d'édition.
+   Liseré pointillé pour signaler le changement de comportement. */
+.is-editing .bingo-cell {
+    outline: 1.5px dashed var(--color-accent);
+    outline-offset: -1.5px;
+}
+
+/* Mobile : le mode édition remplace le crayon. Règle composant (et non
+   l'utility max-sm:hidden) car le display:flex de `.btn`, unlayered et
+   déclaré après, gagnerait sur l'utility layered. */
+@media (max-width: 40rem) {
+    .bingo-cell .cell-edit {
+        display: none;
+    }
+}
+
 /* ─── Photo-preuve ─────────────────────────────────────────────
    The background-image is set inline by the template via a `style` attribute.
    We add a gradient overlay via ::before to keep the title/note readable. */
@@ -160,6 +176,12 @@ body > * {
     opacity: 1;
 }
 
+/* Césure des mots trop larges pour les cellules étroites (mobile surtout) */
+.cell-title {
+    hyphens: auto;
+    overflow-wrap: break-word;
+}
+
 .bingo-cell.done .cell-title {
     text-decoration: line-through;
     text-decoration-color: rgba(42, 38, 64, .4);
@@ -193,6 +215,25 @@ body > * {
 @keyframes confetti-fall {
     0%   { transform: translate(0, 0) rotate(0); opacity: 1; }
     100% { transform: translate(var(--cx, 0px), var(--cy, 200px)) rotate(var(--cr, 540deg)); opacity: 0; }
+}
+
+/* ─── Toast PWA « nouvelle version » ──────────────────────────────
+   position:fixed sans utility Tailwind : la règle `body > *` unlayered
+   ci-dessus bat les utilities layered (même précédent que .tweaks-anchor). */
+
+.pwa-toast {
+    position: fixed;
+    bottom: 1.25rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    display: flex;
+    max-width: 92vw;
+    box-shadow: var(--shadow-pop);
+}
+
+.pwa-toast.hidden {
+    display: none;
 }
 
 /* ─── Misc browser chrome ─────────────────────────────────────── */

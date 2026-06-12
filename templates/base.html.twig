@@ -43,11 +43,13 @@ data-photo-filter="{{ app.user ? (app.user.photoFilter ? 'on' : 'off') : '' }}"
                 if (!h.dataset.density) h.dataset.density = localStorage.getItem('bingo.density') || 'regular';
                 if (!h.dataset.photoFilter) h.dataset.photoFilter = localStorage.getItem('bingo.photoFilter') || 'on';
             })();
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function () {
-                    navigator.serviceWorker.register('/sw.js').catch(function () {});
-                });
-            }
+            // Capturé ici (et pas dans le controller Stimulus) car l'événement
+            // peut tirer avant le chargement des modules ES de l'importmap.
+            window.addEventListener('beforeinstallprompt', function (e) {
+                e.preventDefault();
+                window.deferredInstallPrompt = e;
+                window.dispatchEvent(new CustomEvent('pwa:installable'));
+            });
         </script>
         {% block stylesheets %}
         {% endblock %}
@@ -63,10 +65,17 @@ data-photo-filter="{{ app.user ? (app.user.photoFilter ? 'on' : 'off') : '' }}"
         <script src="https://cdn.jsdelivr.net/npm/frankenphp-hot-reload/+esm" type="module"></script>
         {% endif %}
     </head>
-    <body>
+    <body data-controller="pwa-update">
         {% block body %}{% endblock %}
         {% if app.user %}
             {{ include('components/_tweaks.html.twig') }}
         {% endif %}
+
+        <div data-pwa-update-target="toast"
+             class="pwa-toast hidden items-center gap-3 px-4 py-3 rounded-card bg-paper border border-line-soft text-[14px]">
+            <span class="font-semibold text-ink">Nouvelle version disponible</span>
+            <button type="button" data-action="pwa-update#reload" class="btn btn--primary btn--sm">Recharger</button>
+            <button type="button" data-action="pwa-update#dismiss" aria-label="Ignorer" class="btn btn--ghost btn--icon btn--sm">×</button>
+        </div>
     </body>
 </html>

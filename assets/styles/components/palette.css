@@ -35,6 +35,14 @@
     --cell-padding: 18px;
 }
 
+/* Mobile : densité réduite quel que soit le réglage utilisateur.
+   Doit rester après les règles [data-density] ci-dessus pour gagner la cascade. */
+@media (max-width: 40rem) {
+    [data-density="compact"] { --cell-gap: 3px; --cell-padding: 5px; }
+    [data-density="regular"] { --cell-gap: 4px; --cell-padding: 6px; }
+    [data-density="comfy"]   { --cell-gap: 6px; --cell-padding: 8px; }
+}
+
 /* ─── Tweaks panel ──────────────────────────── */
 
 /* Ancre flottante. Réécrit position:fixed sans passer par les utilities
@@ -59,7 +67,8 @@
 
 .tweaks-panel {
     @apply absolute bottom-full right-0 mb-3
-           w-96 p-5 rounded-card-lg bg-paper border border-line-soft;
+           p-5 rounded-card-lg bg-paper border border-line-soft;
+    width: min(92vw, 24rem);
     box-shadow: var(--shadow-pop);
 }
 

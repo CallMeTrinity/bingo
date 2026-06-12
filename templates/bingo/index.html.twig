@@ -12,13 +12,13 @@
 
         {% embed 'components/header.html.twig' %}
             {% block header_main %}
-                <div class="{{ eyebrow }}">{{ bingo.year }}</div>
-                <h1 class="font-serif text-[26px] leading-tight mt-0.5">{{ bingo.title }}</h1>
+                <div class="{{ eyebrow }} hidden sm:block">{{ bingo.year }}</div>
+                <h1 class="font-serif text-lg sm:text-[26px] leading-tight mt-0.5 truncate">{{ bingo.title }}</h1>
             {% endblock %}
 
             {% block header_right %}
-                <div class="flex items-center gap-3.5">
-                    <div class="text-right">
+                <div class="flex items-center gap-2 sm:gap-3.5 shrink-0">
+                    <div class="text-right hidden md:block">
                         <div class="{{ eyebrow }}">Avancement</div>
                         <div class="font-serif text-[22px]" data-bingo-board-target="progressFraction">
                             {{ completed }}<span class="text-ink-faint">/{{ total }}</span>
@@ -32,32 +32,32 @@
                         </button>
                         {{ include('components/_share_panel.html.twig', { bingo: bingo }, with_context = false) }}
                     </div>
-                    <div class="relative w-14 h-14">
-                        <svg viewBox="0 0 36 36" width="56" height="56" class="-rotate-90">
+                    <div class="relative w-11 h-11 sm:w-14 sm:h-14">
+                        <svg viewBox="0 0 36 36" width="100%" height="100%" class="-rotate-90">
                             <circle cx="18" cy="18" r="15.5" fill="none" stroke="var(--color-line)" stroke-width="3" />
                             <circle cx="18" cy="18" r="15.5" fill="none" stroke="var(--color-accent)" stroke-width="3" stroke-linecap="round"
                                     data-bingo-board-target="progressRing"
                                     stroke-dasharray="{{ dash }} 97.4" />
                         </svg>
-                        <div class="absolute inset-0 flex items-center justify-center text-[13px] font-semibold" data-bingo-board-target="progressLabel">{{ pct|round }}%</div>
+                        <div class="absolute inset-0 flex items-center justify-center text-[11px] sm:text-[13px] font-semibold" data-bingo-board-target="progressLabel">{{ pct|round }}%</div>
                     </div>
                 </div>
             {% endblock %}
         {% endembed %}
 
-        <main class="max-w-270 mx-auto px-7 pt-8 pb-20">
-            <section class="flex flex-wrap gap-3 mb-6">
+        <main class="max-w-270 mx-auto px-4 sm:px-7 pt-8 pb-20">
+            <section class="grid grid-cols-2 gap-2.5 sm:flex sm:flex-wrap sm:gap-3 mb-6">
                 {% for chip in [
                     { label: 'Cases faites',     value: completed ~ '/' ~ total, swatch: 'bg-lavender', target: 'completedCount' },
                     { label: 'Lignes complètes', value: completedLinesCount,     swatch: 'bg-peach',    target: 'completedLines' },
                     { label: 'Reste à faire',    value: total - completed,       swatch: 'bg-mint',     target: 'remaining' },
                     { label: 'Année',            value: bingo.year,              swatch: 'bg-sky',      target: null },
                 ] %}
-                    <div class="flex items-center gap-2.5 px-3.5 py-2.5 bg-paper border border-line-soft rounded-xl shadow-[0_2px_6px_-2px_rgba(42,38,64,.05)]">
+                    <div class="flex items-center gap-2.5 px-3 py-2 sm:px-3.5 sm:py-2.5 bg-paper border border-line-soft rounded-xl shadow-[0_2px_6px_-2px_rgba(42,38,64,.05)]">
                         <div class="w-7 h-7 rounded-lg {{ chip.swatch }} shadow-[0_1px_0_rgba(255,255,255,.6)_inset]"></div>
                         <div>
                             <div class="{{ eyebrow }}">{{ chip.label }}</div>
-                            <div class="font-serif text-xl leading-none"
+                            <div class="font-serif text-lg sm:text-xl leading-none"
                                 {% if chip.target %}data-bingo-board-target="{{ chip.target }}"{% endif %}>
                                 {{ chip.value }}
                             </div>
@@ -65,6 +65,18 @@
                     </div>
                 {% endfor %}
             </section>
+
+            {% if not readOnly %}
+                <div class="flex justify-end mb-4 sm:hidden">
+                    <button type="button"
+                            data-action="bingo-board#toggleEdit"
+                            data-bingo-board-target="editToggle"
+                            aria-pressed="false"
+                            class="btn btn--secondary btn--sm">
+                        ✎ Modifier les cases
+                    </button>
+                </div>
+            {% endif %}
 
             {{ include('bingo/_grid.html.twig', { bingo: bingo, linePositions: linePositions, readOnly: readOnly }) }}
 

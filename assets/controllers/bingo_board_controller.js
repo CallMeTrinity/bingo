@@ -14,7 +14,18 @@ export default class extends Controller {
         "progressLabel",
         "progressRing",
         "confettiLayer",
+        "editToggle",
     ]
+
+    // Mode édition (mobile) : un tap sur une case ouvre la modale d'édition
+    // au lieu de la cocher. Lu par bingo_cell_controller via .is-editing.
+    toggleEdit() {
+        const editing = this.element.classList.toggle('is-editing')
+        this.editToggleTarget.setAttribute('aria-pressed', String(editing))
+        this.editToggleTarget.classList.toggle('btn--primary', editing)
+        this.editToggleTarget.classList.toggle('btn--secondary', !editing)
+        this.editToggleTarget.textContent = editing ? '✓ Terminer' : '✎ Modifier les cases'
+    }
 
     sync(event) {
         const { linePositions = [], completedLines = 0, completed = 0, total = 0, becameDone, x, y } = event.detail

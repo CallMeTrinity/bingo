@@ -21,20 +21,20 @@ Params:
     class="bingo-cell group{{ item.completedAt ? ' done' : '' }}{{ item.position in linePositions ? ' in-line' : '' }}{{ imageUrl ? ' has-image' : '' }} relative">
     <div class="flex justify-between items-start">
         {% if item.emoji %}
-            <div class="cell-emoji text-3xl leading-none">{{ item.emoji }}</div>
+            <div class="cell-emoji hidden sm:block text-3xl leading-none">{{ item.emoji }}</div>
         {% else %}
             <div></div>
         {% endif %}
         <div
-            class="cell-check w-5.5 h-5.5 rounded-full border border-dashed border-ink-faint flex items-center justify-center transition-all duration-200">
+            class="cell-check ml-auto w-4.5 h-4.5 sm:w-5.5 sm:h-5.5 rounded-full border border-dashed border-ink-faint flex items-center justify-center transition-all duration-200">
             <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"
-                 stroke-linejoin="round" class="w-3 h-3 opacity-0">
+                 stroke-linejoin="round" class="w-2.5 h-2.5 sm:w-3 sm:h-3 opacity-0">
                 <polyline points="20 6 9 17 4 12"/>
             </svg>
         </div>
     </div>
     <div class="mt-auto">
-        <div class="cell-title text-[13px] font-semibold leading-tight text-ink text-pretty">{{ item.label }}</div>
+        <div class="cell-title text-[11px] sm:text-[13px] font-semibold leading-tight text-ink text-pretty">{{ item.label }}</div>
         {% if item.note %}
             <div
                 class="cell-note font-hand text-[15px] text-ink-soft mt-1 leading-tight line-clamp-2 opacity-0 transition-opacity duration-200">
@@ -47,7 +47,7 @@ Params:
             data-action="click->modal#edit"
             data-modal-id-param="{{ item.id }}"
             aria-label="Éditer la case"
-            class="btn btn--secondary btn--icon btn--sm absolute bottom-1.5 right-1.5 opacity-0 group-hover:opacity-100 focus-visible:opacity-100">
+            class="btn btn--secondary btn--icon btn--sm cell-edit absolute bottom-1.5 right-1.5 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 pointer-coarse:opacity-70">
         ✎
     </button>
     {% endif %}
